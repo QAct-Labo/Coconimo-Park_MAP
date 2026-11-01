@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>東広島 車いす駐車環境 調査MAP | Rollout v1.1.1</title>
+<title>東広島 車いす駐車環境 調査MAP | Rollout v1.1.7 BALANCED POPUP</title>
 <style id="leaflet-layout-css">
 /* Facility3 Core Leaflet 1.9.x layout CSS: embedded locally to avoid partial CDN CSS failures.
    Compatible subset of BSD-2-Clause Leaflet styles. JavaScript runtime uses Leaflet 1.9.4.
@@ -169,6 +169,66 @@ h2{font-size:14px;margin:4px 0 8px}
   max-width:280px;
 }
 .leaflet-tooltip.point-tooltip::before{display:none!important}
+
+.spatial-card{
+  position:absolute;
+  z-index:760;
+  width:min(340px,calc(100% - 24px));
+  max-height:calc(100% - 24px);
+  overflow:auto;
+  background:#fff;
+  border:1px solid #c7d6d1;
+  border-radius:11px;
+  box-shadow:0 4px 18px rgba(0,0,0,.28);
+  box-sizing:border-box;
+  pointer-events:auto;
+}
+.spatial-card-dragbar{
+  position:sticky;
+  top:0;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  min-height:32px;
+  padding:5px 7px 5px 10px;
+  background:#eef5f2;
+  border-bottom:1px solid #d7e4df;
+  border-radius:10px 10px 0 0;
+  color:#45625b;
+  font-size:9.5px;
+  font-weight:800;
+  cursor:grab;
+  user-select:none;
+  touch-action:none;
+}
+.spatial-card-dragbar:active{cursor:grabbing}
+.spatial-card-body{padding:11px 14px 12px}
+.spatial-card-close{
+  flex:none;
+  width:26px;
+  height:26px;
+  border:0;
+  border-radius:7px;
+  background:#fff;
+  color:#49625c;
+  font-size:19px;
+  line-height:22px;
+  cursor:pointer;
+}
+.spatial-card-close:hover{background:#e5eeeb;color:#173e39}
+.spatial-card .popup-title{padding-right:4px}
+.spatial-connector{
+  position:absolute;
+  z-index:755;
+  height:2px;
+  background:rgba(23,62,57,.68);
+  transform-origin:0 50%;
+  border-radius:2px;
+  pointer-events:none;
+}
+
 .rollout-point-icon{background:transparent!important;border:0!important}
 .point-hit{width:32px;height:32px;display:grid;place-items:center;cursor:pointer;border-radius:50%}
 .point-dot{display:block;width:12px;height:12px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #6f8e85,0 1px 4px #0005}
@@ -215,7 +275,7 @@ h2{font-size:14px;margin:4px 0 8px}
 <body>
 <header>
   <div>
-    <div class="version">円陣2026｜チームロールアウト版 · v1.1.1</div>
+    <div class="version">円陣2026｜チームロールアウト版 · v1.1.7 BALANCED POPUP</div>
     <h1>車いすユーザーの駐車環境 調査MAP</h1>
     <p>107地点の手作業確認を原本に、人の気づき・追加地点・コメントを重ねる版です。</p>
   </div>
@@ -350,7 +410,18 @@ h2{font-size:14px;margin:4px 0 8px}
     </details>
 
     <details class="manual-details">
-      <summary>2｜左サイドバーを使う</summary>
+      <summary>2｜地図の視点を保ったまま情報を見る</summary>
+      <div class="manual-body">
+        地図上の点をクリックしても、情報表示のために地図の中心位置や縮尺を自動変更しません。
+        情報カードは点の真上を避け、ドットから少し離れた左右どちらかの空いている側へ表示します。遠くの画面端へ固定するのではなく、地点との位置関係が分かる距離を保ちます。
+        画面中央線をまたぐこともありますが、対象地点と情報カードは線で結ばれ、線は点との上下関係に応じてカードの上辺または下辺へ接続します。
+        情報カード上部の「ドラッグして移動」をつかむと、地図内の好きな位置へ移動でき、接続線も追従します。
+        「地図で見る」「表示中を収める」など、利用者が明示的に選んだ操作のときだけ地図の視点が変わります。
+      </div>
+    </details>
+
+    <details class="manual-details">
+      <summary>3｜左サイドバーを使う</summary>
       <div class="manual-body">
         施設名・住所検索、地域、施設種別、車いす等区画、プラスワンで絞り込めます。
         各施設は「＋」を押すと詳細が展開され、「−」で収納されます。
@@ -359,7 +430,7 @@ h2{font-size:14px;margin:4px 0 8px}
     </details>
 
     <details class="manual-details">
-      <summary>3｜原典と原本を確認する</summary>
+      <summary>4｜原典と原本を確認する</summary>
       <div class="manual-body">
         <b>原典</b>は107施設を選ぶ基礎になった一覧情報です。本MAPでは、広島県「思いやり駐車場利用証交付制度」の協力施設一覧を基礎台帳として使用しています。
         原典から、施設名・住所・地域・施設種別・車いす等区画数・プラスワン区画数を保持しています。<br><br>
@@ -370,7 +441,7 @@ h2{font-size:14px;margin:4px 0 8px}
     </details>
 
     <details class="manual-details">
-      <summary>4｜気づき・新しい地点を追加する</summary>
+      <summary>5｜気づき・新しい地点を追加する</summary>
       <div class="manual-body">
         107施設以外にも、民間施設などで車椅子用駐車位置を見つけた場合は「＋地点を追加」から登録できます。
         また、既存107地点・チーム追加地点のどちらにもコメントを付けられます。
@@ -380,7 +451,7 @@ h2{font-size:14px;margin:4px 0 8px}
     </details>
 
     <details class="manual-details">
-      <summary>5｜チーム共有機能について</summary>
+      <summary>6｜チーム共有機能について</summary>
       <div class="manual-body">
         このMAPには、追加した地点やコメントをJSONファイルとして保存・読み込みする機能があります。
         将来的には、各メンバーが現地や地図上で見つけた情報を持ち寄り、チームで統合・確認したうえで、更新版MAPへ反映していく運用を想定しています。<br><br>
@@ -391,7 +462,7 @@ h2{font-size:14px;margin:4px 0 8px}
     </details>
 
     <details class="manual-details">
-      <summary>6｜安全な使い方</summary>
+      <summary>7｜安全な使い方</summary>
       <div class="manual-body">
         このMAPの登録地点は現地確認済み・利用保証済みとは限りません。
         Street Viewも最寄りの撮影地点を表示する場合があります。
@@ -428,7 +499,7 @@ h2{font-size:14px;margin:4px 0 8px}
   </div>
 </div>
 
-<script id="canonical-data" type="application/json">{"schema":"higashihiroshima-accessible-parking-rollout/canonical-1.0","app_version":"1.1.0","canonical_id":"facility107-r107","source_file":"Facility107_Manual_v0.4.0_r107_107of107.html","point_count":107,"wheel_spaces_total":248,"plus_one_spaces_total":59,"point_method":"利用者がGoogleマップ上で車椅子用駐車区画を確認できた場合はその位置を登録し、判別できない場合は施設位置を代替登録した。既存の一部13地点は先行確認データを継承している。いずれも現地測量・現地確認済み座標を意味しない。","points":[{"id":"hiroshima-2026-7","name":"広島県東広島庁舎","address":"広島県東広島市西条昭和町13-10","raw_name":"広島県東広島庁舎","raw_address":"広島県東広島市西条昭和町13-10","area":"西条","category":"役所・出張所","wheel_spaces":2,"plus_one_spaces":null,"lat":34.42579930200581,"lon":132.74366204858381,"confirmed_at":"2026-11-01T11:19:07","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-8","name":"東広島市役所本庁舎","address":"広島県東広島市西条栄町8-29","raw_name":"東広島市役所本庁舎","raw_address":"広島県東広島市西条栄町8-29","area":"西条","category":"役所・出張所","wheel_spaces":2,"plus_one_spaces":null,"lat":34.426490498749175,"lon":132.74317450904223,"confirmed_at":"2026-10-13T23:19:47","review_origin":"seed_13"},{"id":"hiroshima-2026-9","name":"東広島市役所社会福祉課","address":"広島県東広島市西条栄町8-29","raw_name":"東広島市役所社会福祉課","raw_address":"広島県東広島市西条栄町8-29","area":"西条","category":"役所・出張所","wheel_spaces":2,"plus_one_spaces":2,"lat":34.426998195610715,"lon":132.74348119622334,"confirmed_at":"2026-11-01T11:20:03","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-10","name":"東広島市役所黒瀬支所本庁舎","address":"広島県東広島市黒瀬町丸山1333","raw_name":"東広島市役所黒瀬支所本庁舎","raw_address":"広島県東広島市黒瀬町丸山1333","area":"黒瀬","category":"役所・出張所","wheel_spaces":2,"plus_one_spaces":null,"lat":34.32456990860389,"lon":132.6771937761419,"confirmed_at":"2026-11-01T10:38:41","review_origin":"seed_13"},{"id":"hiroshima-2026-11","name":"東広島市役所黒瀬支所南庁舎","address":"広島県東広島市黒瀬町丸山1333","raw_name":"東広島市役所黒瀬支所南庁舎","raw_address":"広島県東広島市黒瀬町丸山1333","area":"黒瀬","category":"役所・出張所","wheel_spaces":2,"plus_one_spaces":null,"lat":34.32460106052634,"lon":132.67717907197274,"confirmed_at":"2026-11-01T10:40:03","review_origin":"seed_13"},{"id":"hiroshima-2026-12","name":"東広島市役所福富支所","address":"広島県東広島市福富町久芳1545-1","raw_name":"東広島市役所福富支所","raw_address":"広島県東広島市福富町久芳1545-1","area":"福富","category":"役所・出張所","wheel_spaces":4,"plus_one_spaces":null,"lat":34.536491462468305,"lon":132.77788137595564,"confirmed_at":"2026-11-01T11:20:41","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-13","name":"東広島市役所豊栄支所","address":"広島県東広島市豊栄町鍛冶屋963-2","raw_name":"東広島市役所豊栄支所","raw_address":"広島県東広島市豊栄町鍛冶屋963-2","area":"豊栄","category":"役所・出張所","wheel_spaces":2,"plus_one_spaces":null,"lat":34.56348597929951,"lon":132.82523309268456,"confirmed_at":"2026-11-01T11:21:33","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-14","name":"東広島市役所河内支所","address":"広島県東広島市河内町中河内1166","raw_name":"東広島市役所河内支所","raw_address":"広島県東広島市河内町中河内1166","area":"河内","category":"役所・出張所","wheel_spaces":2,"plus_one_spaces":null,"lat":34.4722374661848,"lon":132.88843243666102,"confirmed_at":"2026-11-01T10:42:01","review_origin":"seed_13"},{"id":"hiroshima-2026-15","name":"東広島市役所安芸津支所","address":"広島県東広島市安芸津町三津4398","raw_name":"東広島市役所安芸津支所","raw_address":"広島県東広島市安芸津町三津4398","area":"安芸津","category":"役所・出張所","wheel_spaces":2,"plus_one_spaces":null,"lat":34.31934395184554,"lon":132.81394324050774,"confirmed_at":"2026-11-01T11:23:49","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-16","name":"東広島市役所八本松出張所","address":"広島県東広島市八本松町原10128-200","raw_name":"東広島市役所八本松出張所","raw_address":"広島県東広島市八本松町原10128-200","area":"八本松","category":"役所・出張所","wheel_spaces":1,"plus_one_spaces":null,"lat":34.44088502898758,"lon":132.69239694821317,"confirmed_at":"2026-11-01T11:24:11","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-17","name":"東広島市役所志和出張所","address":"広島県東広島市志和町志和堀4123-6","raw_name":"東広島市役所志和出張所","raw_address":"広島県東広島市志和町志和堀4123-6","area":"志和","category":"役所・出張所","wheel_spaces":1,"plus_one_spaces":null,"lat":34.499151314451765,"lon":132.66015756685252,"confirmed_at":"2026-11-01T11:24:34","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-18","name":"東広島市役所高屋出張所","address":"広島県東広島市高屋町杵原1334-2","raw_name":"東広島市役所高屋出張所","raw_address":"広島県東広島市高屋町杵原1334-2","area":"高屋","category":"役所・出張所","wheel_spaces":1,"plus_one_spaces":null,"lat":34.44790525211171,"lon":132.7876633421327,"confirmed_at":"2026-11-01T11:25:05","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-25","name":"東広島警察署","address":"広島県東広島市西条昭和町4-11","raw_name":"東広島警察署","raw_address":"広島県東広島市西条昭和町4-11","area":"西条","category":"警察・消防","wheel_spaces":2,"plus_one_spaces":1,"lat":34.42404068447228,"lon":132.74118614766766,"confirmed_at":"2026-11-01T11:26:06","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-32","name":"県立安芸津病院","address":"広島県東広島市安芸津町三津4388","raw_name":"県立安芸津病院","raw_address":"広島県東広島市安芸津町三津4388","area":"安芸津","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.32014648689961,"lon":132.8157143768191,"confirmed_at":"2026-11-01T11:26:34","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-33","name":"東広島医療センター","address":"広島県東広島市西条町寺家513","raw_name":"東広島医療センター","raw_address":"広島県東広島市西条町寺家513","area":"西条","category":"福祉・医療施設","wheel_spaces":13,"plus_one_spaces":null,"lat":34.44837904691745,"lon":132.72338259880766,"confirmed_at":"2026-10-13T23:21:16","review_origin":"seed_13"},{"id":"hiroshima-2026-34","name":"浅倉歯科医院","address":"広島県東広島市高屋町造賀3595-2","raw_name":"浅倉歯科医院","raw_address":"広島県東広島市高屋町造賀3595-2","area":"高屋","category":"福祉・医療施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.4829601358768,"lon":132.76068253050002,"confirmed_at":"2026-11-01T11:26:59","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-35","name":"総合福祉センター","address":"広島県東広島市西条町土与丸1108","raw_name":"総合福祉センター","raw_address":"広島県東広島市西条町土与丸1108","area":"西条","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":1,"lat":34.42474168280747,"lon":132.75274507953606,"confirmed_at":"2026-11-01T11:27:30","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-36","name":"黒瀬保健福祉センター","address":"広島県東広島市黒瀬町丸山1286-1","raw_name":"黒瀬保健福祉センター","raw_address":"広島県東広島市黒瀬町丸山1286-1","area":"黒瀬","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":1,"lat":34.324691094716336,"lon":132.67679823406607,"confirmed_at":"2026-11-01T11:29:39","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-37","name":"豊栄保健福祉センター","address":"広島県東広島市豊栄町乃美2841-1","raw_name":"豊栄保健福祉センター","raw_address":"広島県東広島市豊栄町乃美2841-1","area":"豊栄","category":"福祉・医療施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.563818706823795,"lon":132.8216595839596,"confirmed_at":"2026-11-01T11:29:59","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-38","name":"河内保健福祉センター","address":"広島県東広島市河内町中河内1206-1","raw_name":"河内保健福祉センター","raw_address":"広島県東広島市河内町中河内1206-1","area":"河内","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.471939612132175,"lon":132.88939002775916,"confirmed_at":"2026-11-01T11:30:28","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-39","name":"河内社会福祉会館","address":"広島県東広島市河内町中河内1232-4","raw_name":"河内社会福祉会館","raw_address":"広島県東広島市河内町中河内1232-4","area":"河内","category":"福祉・医療施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.470963687289505,"lon":132.89002326292487,"confirmed_at":"2026-11-01T11:30:52","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-40","name":"安芸津文化福祉センター","address":"広島県東広島市安芸津町三津4398","raw_name":"安芸津文化福祉センター","raw_address":"広島県東広島市安芸津町三津4398","area":"安芸津","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":2,"lat":34.319902934368415,"lon":132.81350922869493,"confirmed_at":"2026-11-01T11:31:26","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-41","name":"特別養護老人ホーム御薗寮","address":"広島県東広島市高屋町高屋堀3486","raw_name":"特別養護老人ホーム御薗寮","raw_address":"広島県東広島市高屋町高屋堀3486","area":"高屋","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.459441029582415,"lon":132.81053362475683,"confirmed_at":"2026-11-01T11:31:52","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-42","name":"障害福祉サービス事業所ウィング","address":"広島県東広島市八本松町米満461","raw_name":"障害福祉サービス事業所ウィング","raw_address":"広島県東広島市八本松町米満461","area":"八本松","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":5,"lat":34.4500515022425,"lon":132.72347602406438,"confirmed_at":"2026-11-01T11:32:22","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-43","name":"あきつ世代間交流センター","address":"広島県東広島市安芸津町三津5556-1","raw_name":"あきつ世代間交流センター","raw_address":"広島県東広島市安芸津町三津5556-1","area":"安芸津","category":"福祉・医療施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.319394932282485,"lon":132.81324341291636,"confirmed_at":"2026-11-01T11:32:46","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-44","name":"東広島保健医療センター","address":"広島県東広島市西条町土与丸1113","raw_name":"東広島保健医療センター","raw_address":"広島県東広島市西条町土与丸1113","area":"西条","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":1,"lat":34.4245419277456,"lon":132.75309645219127,"confirmed_at":"2026-11-01T11:33:23","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-45","name":"黒瀬児童館","address":"広島県東広島市黒瀬町丸山1450-1","raw_name":"黒瀬児童館","raw_address":"広島県東広島市黒瀬町丸山1450-1","area":"黒瀬","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.32449048263833,"lon":132.67227067319158,"confirmed_at":"2026-11-01T11:33:54","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-46","name":"勤労福祉センター","address":"広島県東広島市西条吉行東１丁目1-16","raw_name":"勤労福祉センター","raw_address":"広島県東広島市西条吉行東１丁目1-16","area":"西条","category":"福祉・医療施設","wheel_spaces":4,"plus_one_spaces":null,"lat":34.43265010015062,"lon":132.75802587386212,"confirmed_at":"2026-11-01T11:34:24","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-47","name":"のぞみ整形外科クリニック西条","address":"広島県東広島市西条町助実1182-1","raw_name":"のぞみ整形外科クリニック","raw_address":"広島県東広島市西条町助実1182-1","area":"西条","category":"福祉・医療施設","wheel_spaces":7,"plus_one_spaces":null,"lat":34.42501303162018,"lon":132.75558034344988,"confirmed_at":"2026-11-01T10:34:31","review_origin":"seed_13"},{"id":"hiroshima-2026-48","name":"ゆかわ脳神経外科クリニック","address":"広島県東広島市西条土与丸5丁目9番33号","raw_name":"ゆかわ脳神経外科クリニック","raw_address":"広島県東広島市西条土与丸5丁目9番33号","area":"西条","category":"福祉・医療施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.42852963957907,"lon":132.75275990967663,"confirmed_at":"2026-11-01T11:34:44","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-49","name":"のぞみ整形外科クリニック寺屋","address":"広島県東広島市西条町寺屋4720","raw_name":"のぞみ整形外科クリニック寺屋","raw_address":"広島県東広島市西条町寺屋4720","area":"西条","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":2,"lat":34.43693201113164,"lon":132.72284167445557,"confirmed_at":"2026-11-01T11:35:17","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-56","name":"教育センター　本館","address":"広島県東広島市八本松南1-2-1","raw_name":"教育センター　本館","raw_address":"広島県東広島市八本松南1-2-1","area":"八本松","category":"教育施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.44152338413575,"lon":132.6952011373719,"confirmed_at":"2026-11-01T11:35:41","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-57","name":"教育センター　特別支援教育棟","address":"広島県東広島市八本松南1-2-2","raw_name":"教育センター　特別支援教育棟","raw_address":"広島県東広島市八本松南1-2-2","area":"八本松","category":"教育施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.441532042219904,"lon":132.69519911300992,"confirmed_at":"2026-11-01T11:42:05","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-58","name":"東広島市天文台広場","address":"広島県東広島市西条町下三永695-1","raw_name":"東広島市天文台広場","raw_address":"広島県東広島市西条町下三永695-1","area":"西条","category":"教育施設","wheel_spaces":null,"plus_one_spaces":1,"lat":34.377350883614305,"lon":132.77676869971165,"confirmed_at":"2026-11-01T11:42:31","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-65","name":"憩いの森公園","address":"広島県東広島市西条町寺家941-17","raw_name":"憩いの森公園","raw_address":"広島県東広島市西条町寺家941-17","area":"西条","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":4,"plus_one_spaces":4,"lat":34.446789710680996,"lon":132.73822095022513,"confirmed_at":"2026-11-01T11:43:08","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-66","name":"道の駅　湖畔の里福富","address":"広島県東広島市福富町久芳1506","raw_name":"道の駅　湖畔の里福富","raw_address":"広島県東広島市福富町久芳1506","area":"福富","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":3,"plus_one_spaces":null,"lat":34.532966214787095,"lon":132.77515137064174,"confirmed_at":"2026-10-13T23:23:26","review_origin":"seed_13"},{"id":"hiroshima-2026-67","name":"東広島運動公園","address":"広島県東広島市西条町田口67-1","raw_name":"東広島運動公園","raw_address":"広島県東広島市西条町田口67-1","area":"西条","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":6,"plus_one_spaces":null,"lat":34.3805534620736,"lon":132.7314200961631,"confirmed_at":"2026-11-01T11:43:31","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-68","name":"黒瀬屋内プール","address":"広島県東広島市黒瀬町楢原18-4","raw_name":"黒瀬屋内プール","raw_address":"広島県東広島市黒瀬町楢原18-4","area":"黒瀬","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.332600207485015,"lon":132.67108077850583,"confirmed_at":"2026-10-13T23:26:28","review_origin":"seed_13"},{"id":"hiroshima-2026-69","name":"黒瀬市民グラウンド","address":"広島県東広島市黒瀬町津江575-2","raw_name":"黒瀬市民グラウンド","raw_address":"広島県東広島市黒瀬町津江575-2","area":"黒瀬","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":2,"plus_one_spaces":1,"lat":34.34631494721522,"lon":132.6178793595522,"confirmed_at":"2026-11-01T11:44:05","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-70","name":"黒瀬B&G海洋センター","address":"東広島市黒瀬町楢原10018番地4","raw_name":"黒瀬Ｂ＆Ｇ海洋センター","raw_address":"広島県東広島市黒瀬町楢原18-4","area":"黒瀬","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.3337576291371,"lon":132.66997717754543,"confirmed_at":"2026-11-01T11:44:37","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-71","name":"安芸津Ｂ＆Ｇ海洋センター","address":"広島県東広島市安芸津町風早3092-1","raw_name":"安芸津Ｂ＆Ｇ海洋センター","raw_address":"広島県東広島市安芸津町風早3092-1","area":"安芸津","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.31698475788121,"lon":132.80903690964473,"confirmed_at":"2026-11-01T11:45:00","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-72","name":"福富パークゴルフ場","address":"広島県東広島市福富町久芳4286-1","raw_name":"福富パークゴルフ場","raw_address":"広島県東広島市福富町久芳4286-1","area":"福富","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.53699058085348,"lon":132.77486596737668,"confirmed_at":"2026-11-01T11:45:37","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-73","name":"道の駅西条のん太の酒蔵","address":"広島県東広島市西条町寺家10020-43","raw_name":"道の駅西条のん太の酒蔵","raw_address":"広島県東広島市西条町寺家10020-43","area":"西条","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":3,"plus_one_spaces":null,"lat":34.43359503237307,"lon":132.70292077630435,"confirmed_at":"2026-11-01T11:46:10","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-80","name":"東広島市黒瀬文化会館","address":"広島県東広島市黒瀬町乃美尾890-1","raw_name":"東広島市黒瀬文化会館","raw_address":"広島県東広島市黒瀬町乃美尾890-1","area":"黒瀬","category":"文化施設・図書館","wheel_spaces":1,"plus_one_spaces":null,"lat":34.34217079195044,"lon":132.69250678496005,"confirmed_at":"2026-11-01T11:47:59","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-81","name":"東広島河内人権センター","address":"広島県東広島市河内町中河内1289-1","raw_name":"東広島河内人権センター","raw_address":"広島県東広島市河内町中河内1289-1","area":"河内","category":"文化施設・図書館","wheel_spaces":1,"plus_one_spaces":null,"lat":34.4703448,"lon":132.8921933,"confirmed_at":"2026-10-13T21:27:52","review_origin":"seed_13"},{"id":"hiroshima-2026-82","name":"東広島市指定重要文化財 旧石井家住宅","address":"広島県東広島市西条町下見1086-1","raw_name":"東広島市指定重要文化財旧石井家住宅","raw_address":"広島県東広島市西条町下見1086-1","area":"西条","category":"文化施設・図書館","wheel_spaces":1,"plus_one_spaces":1,"lat":34.413676,"lon":132.720398,"confirmed_at":"2026-10-13","review_origin":"seed_13"},{"id":"hiroshima-2026-83","name":"東広島市出土文化財管理センター","address":"広島県東広島市河内町中河内651-7","raw_name":"東広島市出土文化財管理センター","raw_address":"広島県東広島市河内町中河内651-7","area":"河内","category":"文化施設・図書館","wheel_spaces":2,"plus_one_spaces":2,"lat":34.468513141515515,"lon":132.89092257373298,"confirmed_at":"2026-11-01T11:48:19","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-84","name":"中央図書館","address":"広島県東広島市西条中央7丁目25-11","raw_name":"中央図書館","raw_address":"広島県東広島市西条中央7丁目25-11","area":"西条","category":"文化施設・図書館","wheel_spaces":5,"plus_one_spaces":null,"lat":34.41582624539252,"lon":132.73569995243258,"confirmed_at":"2026-11-01T11:49:32","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-91","name":"寺西地域センター","address":"広島県東広島市西条町寺家3166-1","raw_name":"寺西地域センター","raw_address":"広島県東広島市西条町寺家3166-1","area":"西条","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":3,"plus_one_spaces":null,"lat":34.4293253528573,"lon":132.71920545260872,"confirmed_at":"2026-11-01T11:50:01","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-92","name":"郷田地域センター","address":"広島県東広島市西条町郷曽11130-5","raw_name":"郷田地域センター","raw_address":"広島県東広島市西条町郷曽11130-5","area":"西条","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":3,"plus_one_spaces":null,"lat":34.37860096698428,"lon":132.71018616716583,"confirmed_at":"2026-11-01T11:50:21","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-93","name":"板城地域センター","address":"広島県東広島市西条町馬木565-1","raw_name":"板城地域センター","raw_address":"広島県東広島市西条町馬木565-1","area":"西条","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":1,"lat":34.370736060940864,"lon":132.7325932757926,"confirmed_at":"2026-11-01T11:51:12","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-94","name":"三永地域センター","address":"広島県東広島市西条町下三永10927-2","raw_name":"三永地域センター","raw_address":"広島県東広島市西条町下三永10927-2","area":"西条","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.393535359075294,"lon":132.77790878839835,"confirmed_at":"2026-11-01T11:52:41","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-95","name":"御薗宇地域センター","address":"広島県東広島市西条町御薗宇7200","raw_name":"御薗宇地域センター","raw_address":"広島県東広島市西条町御薗宇7200","area":"西条","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.408332540644345,"lon":132.7479847237411,"confirmed_at":"2026-11-01T11:53:06","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-96","name":"東西条地域センター","address":"広島県東広島市西条土与丸2-3-4","raw_name":"東西条地域センター","raw_address":"広島県東広島市西条土与丸2-3-4","area":"西条","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.431647923319424,"lon":132.75287773744316,"confirmed_at":"2026-11-01T11:55:14","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-97","name":"川上地域センター","address":"広島県東広島市八本松飯田8-19-49","raw_name":"川上地域センター","raw_address":"広島県東広島市八本松飯田8-19-49","area":"八本松","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":2,"lat":34.4546114240438,"lon":132.69846488242044,"confirmed_at":"2026-11-01T11:56:48","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-98","name":"吉川地域センター","address":"広島県東広島市八本松町吉川435-1","raw_name":"吉川地域センター","raw_address":"広島県東広島市八本松町吉川435-1","area":"八本松","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.39352049599422,"lon":132.67206747544714,"confirmed_at":"2026-11-01T11:57:11","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-99","name":"八本松地域センター","address":"広島県東広島市八本松南2-1-1","raw_name":"八本松地域センター","raw_address":"広島県東広島市八本松南2-1-1","area":"八本松","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.43877510251756,"lon":132.69354567355586,"confirmed_at":"2026-11-01T11:57:58","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-100","name":"東志和地域センター","address":"広島県東広島市志和町志和東3887-1","raw_name":"東志和地域センター","raw_address":"広島県東広島市志和町志和東3887-1","area":"志和","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":3,"plus_one_spaces":null,"lat":34.48032648300441,"lon":132.6810517315334,"confirmed_at":"2026-11-01T11:58:20","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-101","name":"志和堀地域センター","address":"広島県東広島市志和町志和堀857","raw_name":"志和堀地域センター","raw_address":"広島県東広島市志和町志和堀857","area":"志和","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.507916481003626,"lon":132.6725004443592,"confirmed_at":"2026-11-01T11:59:02","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-102","name":"高屋西地域センター","address":"広島県東広島市高屋町杵原1276","raw_name":"高屋西地域センター","raw_address":"広島県東広島市高屋町杵原1276","area":"高屋","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.44929473108289,"lon":132.78439932431135,"confirmed_at":"2026-11-01T12:01:16","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-103","name":"小谷地域センター","address":"広島県東広島市高屋町小谷5560","raw_name":"小谷地域センター","raw_address":"広島県東広島市高屋町小谷5560","area":"高屋","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.43674515993429,"lon":132.84230693122927,"confirmed_at":"2026-11-01T12:21:16","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-104","name":"造賀地域センター","address":"広島県東広島市高屋町造賀3638-1","raw_name":"造賀地域センター","raw_address":"広島県東広島市高屋町造賀3638-1","area":"高屋","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.48650140121753,"lon":132.7614421606528,"confirmed_at":"2026-11-01T12:22:58","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-105","name":"高美が丘地域センター","address":"広島県東広島市高屋高美が丘4-34-2","raw_name":"高美が丘地域センター","raw_address":"広島県東広島市高屋高美が丘4-34-2","area":"高屋","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.46046089162416,"lon":132.79224412316012,"confirmed_at":"2026-11-01T12:24:46","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-106","name":"竹仁地域センター","address":"広島県東広島市福富町下竹仁501-11","raw_name":"竹仁地域センター","raw_address":"広島県東広島市福富町下竹仁501-11","area":"福富","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.52767292499443,"lon":132.74011401199616,"confirmed_at":"2026-11-01T12:25:42","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-107","name":"上戸野地域センター","address":"広島県東広島市福富町上戸野2555-1","raw_name":"上戸野地域センター","raw_address":"広島県東広島市福富町上戸野2555-1","area":"福富","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":3,"plus_one_spaces":1,"lat":34.51450893736099,"lon":132.78050600751487,"confirmed_at":"2026-11-01T12:26:22","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-108","name":"清武西地域センター","address":"広島県東広島市豊栄町清武3756-1","raw_name":"清武西地域センター","raw_address":"広島県東広島市豊栄町清武3756-1","area":"豊栄","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.59461277671077,"lon":132.81372680558917,"confirmed_at":"2026-11-01T12:27:06","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-109","name":"清武地域センター","address":"広島県東広島市豊栄町鍛冶屋603","raw_name":"清武地域センター","raw_address":"広島県東広島市豊栄町鍛冶屋603","area":"豊栄","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.569114596854845,"lon":132.82405457140104,"confirmed_at":"2026-11-01T12:28:53","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-110","name":"安宿地域センター","address":"広島県東広島市豊栄町安宿3876-1","raw_name":"安宿地域センター","raw_address":"広島県東広島市豊栄町安宿3876-1","area":"豊栄","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.5640781713616,"lon":132.84773517453772,"confirmed_at":"2026-11-01T12:30:00","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-111","name":"乃美地域センター","address":"広島県東広島市豊栄町乃美3163","raw_name":"乃美地域センター","raw_address":"広島県東広島市豊栄町乃美3163","area":"豊栄","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":2,"lat":34.566906809915444,"lon":132.81172832678385,"confirmed_at":"2026-11-01T12:31:17","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-112","name":"吉原地域センター","address":"広島県東広島市豊栄町吉原2243-1","raw_name":"吉原地域センター","raw_address":"広島県東広島市豊栄町吉原2243-1","area":"豊栄","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.6034480327586,"lon":132.8627965865715,"confirmed_at":"2026-11-01T12:32:21","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-113","name":"入野地域センター","address":"広島県東広島市河内町入野2650-3","raw_name":"入野地域センター","raw_address":"広島県東広島市河内町入野2650-3","area":"河内","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":1,"lat":34.441050002668256,"lon":132.8592270725989,"confirmed_at":"2026-11-01T12:32:45","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-114","name":"小田地域センター","address":"広島県東広島市河内町小田2182","raw_name":"小田地域センター","raw_address":"広島県東広島市河内町小田2182","area":"河内","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.50609490808201,"lon":132.87273956524683,"confirmed_at":"2026-11-01T12:34:08","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-115","name":"風早地域センター","address":"広島県東広島市安芸津町風早1214-1","raw_name":"風早地域センター","raw_address":"広島県東広島市安芸津町風早1214-1","area":"安芸津","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.31358560840419,"lon":132.7940922889014,"confirmed_at":"2026-11-01T12:34:57","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-116","name":"乃美尾会館","address":"広島県東広島市黒瀬町乃美尾2131-1","raw_name":"乃美尾会館","raw_address":"広島県東広島市黒瀬町乃美尾2131-1","area":"黒瀬","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.33214627490691,"lon":132.69524477654926,"confirmed_at":"2026-11-01T12:35:43","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-117","name":"西志和地域センター","address":"広島県東広島市志和町七条椛坂1737-1","raw_name":"西志和地域センター","raw_address":"広島県東広島市志和町七条椛坂1737-1","area":"志和","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.48032957842801,"lon":132.68105100696354,"confirmed_at":"2026-11-01T12:36:09","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-118","name":"東広島市黒瀬生涯学習センター","address":"広島県東広島市黒瀬町菅田10","raw_name":"東広島市黒瀬生涯学習センター","raw_address":"広島県東広島市黒瀬町菅田10","area":"黒瀬","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.323724150992604,"lon":132.67090558659885,"confirmed_at":"2026-11-01T12:37:49","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-119","name":"三ツ城地域センター（下見福祉会館）","address":"広島県東広島市西条町下見5-4-8","raw_name":"三ツ城地域センター（下見福祉会館）","raw_address":"広島県東広島市西条町下見5-4-8","area":"西条","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":3,"plus_one_spaces":null,"lat":34.41175977006557,"lon":132.71708233052448,"confirmed_at":"2026-11-01T12:38:19","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-120","name":"能良地域センター","address":"広島県東広島市豊栄町能良1574-1","raw_name":"能良地域センター","raw_address":"広島県東広島市豊栄町能良1574-1","area":"豊栄","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.53853280153335,"lon":132.8252486297416,"confirmed_at":"2026-11-01T12:38:54","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-121","name":"高屋東地域センター","address":"広島県東広島市高屋町白市550","raw_name":"高屋東地域センター","raw_address":"広島県東広島市高屋町白市550","area":"高屋","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.45693314683726,"lon":132.81858359027217,"confirmed_at":"2026-11-01T12:40:10","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-128","name":"西部畜産事務所","address":"広島県東広島市西条御条町1-15","raw_name":"西部畜産事務所","raw_address":"広島県東広島市西条御条町1-15","area":"西条","category":"生活・経済関連施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.42551124953185,"lon":132.74518971332532,"confirmed_at":"2026-11-01T12:40:35","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-129","name":"海辺の里おおしば","address":"広島県東広島市安芸津町風早2514-1","raw_name":"海辺の里おおしば","raw_address":"広島県東広島市安芸津町風早2514-1","area":"安芸津","category":"生活・経済関連施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.27066719995531,"lon":132.7996599335239,"confirmed_at":"2026-11-01T12:41:26","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-130","name":"テクノタウン東広島集会所","address":"広島県東広島市西大沢1丁目31-3","raw_name":"テクノタウン東広島集会所","raw_address":"広島県東広島市西大沢1丁目31-3","area":"その他","category":"生活・経済関連施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.37261361520981,"lon":132.72537320485125,"confirmed_at":"2026-11-01T12:42:42","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-131","name":"広島中央エコパーク","address":"東広島市西条町上三永10759番地2","raw_name":"中央エコパーク管理棟","raw_address":"広島県東広島市西条町上三永10759-2","area":"西条","category":"生活・経済関連施設","wheel_spaces":2,"plus_one_spaces":1,"lat":34.4088699965532,"lon":132.78718690255567,"confirmed_at":"2026-11-01T12:43:37","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-138","name":"ひがしひろしま聖苑","address":"東広島市八本松町宗吉10056番地","raw_name":"ひがしひろしま聖苑","raw_address":"広島県東広島市八本松町宗吉56","area":"八本松","category":"斎場・霊園等","wheel_spaces":3,"plus_one_spaces":null,"lat":34.463287218993315,"lon":132.69014395371497,"confirmed_at":"2026-11-01T12:44:44","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-139","name":"ひがしひろしま墓園","address":"広島県東広島市八本松町宗吉56","raw_name":"ひがしひろしま墓園","raw_address":"広島県東広島市八本松町宗吉56","area":"八本松","category":"斎場・霊園等","wheel_spaces":3,"plus_one_spaces":1,"lat":34.46329245457173,"lon":132.69014923272238,"confirmed_at":"2026-11-01T12:45:08","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-146","name":"福富物産しゃくなげ館","address":"広島県東広島市福富町下竹仁470-1","raw_name":"福富物産しゃくなげ館","raw_address":"広島県東広島市福富町下竹仁470-1","area":"福富","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":2,"plus_one_spaces":1,"lat":34.52573819518006,"lon":132.7428083252802,"confirmed_at":"2026-11-01T12:45:57","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-147","name":"ゆめタウン　黒瀬","address":"広島県東広島市黒瀬町楢原100-1","raw_name":"ゆめタウン　黒瀬","raw_address":"広島県東広島市黒瀬町楢原100-1","area":"黒瀬","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":6,"plus_one_spaces":2,"lat":34.32409572073156,"lon":132.66590172674523,"confirmed_at":"2026-11-01T12:46:26","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-148","name":"ゆめタウン　東広島","address":"広島県東広島市西条土与丸1-5-7","raw_name":"ゆめタウン　東広島","raw_address":"広島県東広島市西条土与丸1-5-7","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":5,"plus_one_spaces":null,"lat":34.42695244430235,"lon":132.75062429331265,"confirmed_at":"2026-11-01T12:48:06","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-149","name":"フジグラン　東広島","address":"広島県東広島市西条町御薗宇4405","raw_name":"フジグラン　東広島","raw_address":"広島県東広島市西条町御薗宇4405","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":19,"plus_one_spaces":null,"lat":34.40777209167004,"lon":132.74954311296526,"confirmed_at":"2026-11-01T12:48:28","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-150","name":"ユーホー　東広島店","address":"広島県東広島市西条町御薗宇4272","raw_name":"ユーホー　東広島店","raw_address":"広島県東広島市西条町御薗宇4272","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":3,"plus_one_spaces":null,"lat":34.40523814770386,"lon":132.75086084620136,"confirmed_at":"2026-11-01T12:48:52","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-151","name":"あおぞらぱん屋さん 白市店","address":"広島県東広島市高屋町小谷2921-1","raw_name":"あおぞらぱん屋さん","raw_address":"広島県東広島市高屋町小谷2921-1","area":"高屋","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":2,"plus_one_spaces":null,"lat":34.443681120724335,"lon":132.82986417381179,"confirmed_at":"2026-11-01T12:49:52","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-152","name":"ココカラファイン　白市駅前","address":"広島県東広島市高屋町小谷3279-1","raw_name":"ドラッグセガミ　白市駅前","raw_address":"広島県東広島市高屋町小谷3279-1","area":"高屋","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":1,"plus_one_spaces":1,"lat":34.445836229725934,"lon":132.8290084366129,"confirmed_at":"2026-11-01T10:36:17","review_origin":"seed_13"},{"id":"hiroshima-2026-153","name":"ゆめタウン　学園店","address":"広島県東広島市西条下見6-2-32","raw_name":"ゆめタウン　学園店","raw_address":"広島県東広島市西条下見6-2-32","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":7,"plus_one_spaces":null,"lat":34.40856782037032,"lon":132.714156178191,"confirmed_at":"2026-11-01T12:50:24","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-154","name":"ゆめマート　八本松","address":"広島県東広島市八本松東3-10-2","raw_name":"ゆめマート　八本松","raw_address":"広島県東広島市八本松東3-10-2","area":"八本松","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":2,"plus_one_spaces":1,"lat":34.446265609673254,"lon":132.70871042573322,"confirmed_at":"2026-11-01T12:50:54","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-155","name":"ショージ　八本松南店","address":"広島県東広島市八本松南2-18-14","raw_name":"ショージ　八本松南店","raw_address":"広島県東広島市八本松南2-18-14","area":"八本松","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":2,"plus_one_spaces":1,"lat":34.43936764708389,"lon":132.6965588610135,"confirmed_at":"2026-11-01T12:51:21","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-156","name":"ショージ　下見店","address":"広島県東広島市西条町下見4625-1","raw_name":"ショージ　下見店","raw_address":"広島県東広島市西条町下見4625-1","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":2,"plus_one_spaces":1,"lat":34.407465316999726,"lon":132.70709761370082,"confirmed_at":"2026-11-01T12:51:41","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-157","name":"ベッセルホテル　東広島","address":"広島県東広島市三永2-6-36","raw_name":"ベッセルホテル　東広島","raw_address":"広島県東広島市三永2-6-36","area":"その他","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":1,"plus_one_spaces":1,"lat":34.38802782841041,"lon":132.76134644673303,"confirmed_at":"2026-11-01T12:52:05","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-158","name":"ローソン　東広島高屋町桧山店","address":"広島県東広島市高屋町檜山258-1","raw_name":"ローソン　東広島高屋町桧山店","raw_address":"広島県東広島市高屋町檜山258-1","area":"高屋","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":1,"plus_one_spaces":null,"lat":34.440200266656554,"lon":132.7651369076517,"confirmed_at":"2026-11-01T12:52:26","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-159","name":"ローソン東広島西条御薗宇店","address":"広島県東広島市西条町御薗宇字上神田6200-2","raw_name":"ローソン　東広島西条御薗宇店","raw_address":"広島県東広島市西条町御薗宇字上神田6200-2","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":1,"plus_one_spaces":null,"lat":34.41463173827281,"lon":132.7523498002776,"confirmed_at":"2026-10-13T21:29:01","review_origin":"seed_13"},{"id":"hiroshima-2026-160","name":"ミスターマックス　八本松店","address":"広島県東広島市八本松西1-12-23","raw_name":"ミスターマックス　八本松店","raw_address":"広島県東広島市八本松西1-12-23","area":"八本松","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":2,"plus_one_spaces":null,"lat":34.44506705378046,"lon":132.68167940142183,"confirmed_at":"2026-11-01T12:52:48","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-161","name":"藤三 黒瀬店","address":"広島県東広島市黒瀬町丸山1240番1号","raw_name":"ビッグハウス　黒瀬店","raw_address":"広島県東広島市黒瀬町丸山1240","area":"黒瀬","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":4,"plus_one_spaces":null,"lat":34.32438825587193,"lon":132.67531254934295,"confirmed_at":"2026-11-01T12:54:29","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-162","name":"マックスバリュ　西条西店","address":"広島県東広島市西条町寺家3791-1","raw_name":"マックスバリュ　西条西店","raw_address":"広島県東広島市西条町寺家3791-1","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":2,"plus_one_spaces":null,"lat":34.439160242247844,"lon":132.72044042419085,"confirmed_at":"2026-11-01T12:54:58","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-163","name":"マックスバリュ　高屋店","address":"広島県東広島市高屋町杵原1776","raw_name":"マックスバリュ　高屋店","raw_address":"広島県東広島市高屋町杵原1776","area":"高屋","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":2,"plus_one_spaces":null,"lat":34.45347378996906,"lon":132.78708680825434,"confirmed_at":"2026-11-01T12:55:25","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-164","name":"フレスタ　西条店","address":"広島県東広島市西条中央4-1-1","raw_name":"フレスタ　西条店","raw_address":"広島県東広島市西条中央4-1-1","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":3,"plus_one_spaces":null,"lat":34.41459848431763,"lon":132.7434072254259,"confirmed_at":"2026-11-01T12:55:48","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-165","name":"中国労働金庫　西条支店","address":"広島県東広島市西条大坪町1-36","raw_name":"中国労働金庫　西条支店","raw_address":"広島県東広島市西条大坪町1-36","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":1,"plus_one_spaces":null,"lat":34.42450660278715,"lon":132.74715695980532,"confirmed_at":"2026-11-01T12:56:28","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-166","name":"ケーズデンキ東広島店","address":"広島県東広島市西条町助実1232","raw_name":"ケーズデンキ東広島店","raw_address":"広島県東広島市西条町助実","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":5,"plus_one_spaces":3,"lat":34.422406821745305,"lon":132.7569728817319,"confirmed_at":"2026-10-13T23:30:35","review_origin":"seed_13"},{"id":"hiroshima-2026-167","name":"東広島グリーンホテルモーリス","address":"広島県東広島市西条昭和町11-8","raw_name":"東広島グリーンホテルモーリス","raw_address":"広島県東広島市西条昭和町11-8","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":3,"plus_one_spaces":2,"lat":34.42339144932767,"lon":132.74228020820377,"confirmed_at":"2026-11-01T12:57:39","review_origin":"manual_review_20261101"}],"source_description":"広島県「思いやり駐車場利用証交付制度」の協力施設一覧を基礎台帳として使用。施設名・住所・地域・施設種別・車いす等区画数・プラスワン区画数を保持。","terminology":{"source_original":"原典＝107施設を選ぶ基礎になった一覧情報","canonical_master":"原本＝手作業で位置確認を終え、このロールアウト版で固定した107登録地点"}}</script>
+<script id="canonical-data" type="application/json">{"schema":"higashihiroshima-accessible-parking-rollout/canonical-1.0","app_version":"1.1.7","canonical_id":"facility107-r107","source_file":"Facility107_Manual_v0.4.0_r107_107of107.html","point_count":107,"wheel_spaces_total":248,"plus_one_spaces_total":59,"point_method":"利用者がGoogleマップ上で車椅子用駐車区画を確認できた場合はその位置を登録し、判別できない場合は施設位置を代替登録した。既存の一部13地点は先行確認データを継承している。いずれも現地測量・現地確認済み座標を意味しない。","points":[{"id":"hiroshima-2026-7","name":"広島県東広島庁舎","address":"広島県東広島市西条昭和町13-10","raw_name":"広島県東広島庁舎","raw_address":"広島県東広島市西条昭和町13-10","area":"西条","category":"役所・出張所","wheel_spaces":2,"plus_one_spaces":null,"lat":34.42579930200581,"lon":132.74366204858381,"confirmed_at":"2026-11-01T11:19:07","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-8","name":"東広島市役所本庁舎","address":"広島県東広島市西条栄町8-29","raw_name":"東広島市役所本庁舎","raw_address":"広島県東広島市西条栄町8-29","area":"西条","category":"役所・出張所","wheel_spaces":2,"plus_one_spaces":null,"lat":34.426490498749175,"lon":132.74317450904223,"confirmed_at":"2026-10-13T23:19:47","review_origin":"seed_13"},{"id":"hiroshima-2026-9","name":"東広島市役所社会福祉課","address":"広島県東広島市西条栄町8-29","raw_name":"東広島市役所社会福祉課","raw_address":"広島県東広島市西条栄町8-29","area":"西条","category":"役所・出張所","wheel_spaces":2,"plus_one_spaces":2,"lat":34.426998195610715,"lon":132.74348119622334,"confirmed_at":"2026-11-01T11:20:03","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-10","name":"東広島市役所黒瀬支所本庁舎","address":"広島県東広島市黒瀬町丸山1333","raw_name":"東広島市役所黒瀬支所本庁舎","raw_address":"広島県東広島市黒瀬町丸山1333","area":"黒瀬","category":"役所・出張所","wheel_spaces":2,"plus_one_spaces":null,"lat":34.32456990860389,"lon":132.6771937761419,"confirmed_at":"2026-11-01T10:38:41","review_origin":"seed_13"},{"id":"hiroshima-2026-11","name":"東広島市役所黒瀬支所南庁舎","address":"広島県東広島市黒瀬町丸山1333","raw_name":"東広島市役所黒瀬支所南庁舎","raw_address":"広島県東広島市黒瀬町丸山1333","area":"黒瀬","category":"役所・出張所","wheel_spaces":2,"plus_one_spaces":null,"lat":34.32460106052634,"lon":132.67717907197274,"confirmed_at":"2026-11-01T10:40:03","review_origin":"seed_13"},{"id":"hiroshima-2026-12","name":"東広島市役所福富支所","address":"広島県東広島市福富町久芳1545-1","raw_name":"東広島市役所福富支所","raw_address":"広島県東広島市福富町久芳1545-1","area":"福富","category":"役所・出張所","wheel_spaces":4,"plus_one_spaces":null,"lat":34.536491462468305,"lon":132.77788137595564,"confirmed_at":"2026-11-01T11:20:41","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-13","name":"東広島市役所豊栄支所","address":"広島県東広島市豊栄町鍛冶屋963-2","raw_name":"東広島市役所豊栄支所","raw_address":"広島県東広島市豊栄町鍛冶屋963-2","area":"豊栄","category":"役所・出張所","wheel_spaces":2,"plus_one_spaces":null,"lat":34.56348597929951,"lon":132.82523309268456,"confirmed_at":"2026-11-01T11:21:33","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-14","name":"東広島市役所河内支所","address":"広島県東広島市河内町中河内1166","raw_name":"東広島市役所河内支所","raw_address":"広島県東広島市河内町中河内1166","area":"河内","category":"役所・出張所","wheel_spaces":2,"plus_one_spaces":null,"lat":34.4722374661848,"lon":132.88843243666102,"confirmed_at":"2026-11-01T10:42:01","review_origin":"seed_13"},{"id":"hiroshima-2026-15","name":"東広島市役所安芸津支所","address":"広島県東広島市安芸津町三津4398","raw_name":"東広島市役所安芸津支所","raw_address":"広島県東広島市安芸津町三津4398","area":"安芸津","category":"役所・出張所","wheel_spaces":2,"plus_one_spaces":null,"lat":34.31934395184554,"lon":132.81394324050774,"confirmed_at":"2026-11-01T11:23:49","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-16","name":"東広島市役所八本松出張所","address":"広島県東広島市八本松町原10128-200","raw_name":"東広島市役所八本松出張所","raw_address":"広島県東広島市八本松町原10128-200","area":"八本松","category":"役所・出張所","wheel_spaces":1,"plus_one_spaces":null,"lat":34.44088502898758,"lon":132.69239694821317,"confirmed_at":"2026-11-01T11:24:11","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-17","name":"東広島市役所志和出張所","address":"広島県東広島市志和町志和堀4123-6","raw_name":"東広島市役所志和出張所","raw_address":"広島県東広島市志和町志和堀4123-6","area":"志和","category":"役所・出張所","wheel_spaces":1,"plus_one_spaces":null,"lat":34.499151314451765,"lon":132.66015756685252,"confirmed_at":"2026-11-01T11:24:34","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-18","name":"東広島市役所高屋出張所","address":"広島県東広島市高屋町杵原1334-2","raw_name":"東広島市役所高屋出張所","raw_address":"広島県東広島市高屋町杵原1334-2","area":"高屋","category":"役所・出張所","wheel_spaces":1,"plus_one_spaces":null,"lat":34.44790525211171,"lon":132.7876633421327,"confirmed_at":"2026-11-01T11:25:05","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-25","name":"東広島警察署","address":"広島県東広島市西条昭和町4-11","raw_name":"東広島警察署","raw_address":"広島県東広島市西条昭和町4-11","area":"西条","category":"警察・消防","wheel_spaces":2,"plus_one_spaces":1,"lat":34.42404068447228,"lon":132.74118614766766,"confirmed_at":"2026-11-01T11:26:06","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-32","name":"県立安芸津病院","address":"広島県東広島市安芸津町三津4388","raw_name":"県立安芸津病院","raw_address":"広島県東広島市安芸津町三津4388","area":"安芸津","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.32014648689961,"lon":132.8157143768191,"confirmed_at":"2026-11-01T11:26:34","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-33","name":"東広島医療センター","address":"広島県東広島市西条町寺家513","raw_name":"東広島医療センター","raw_address":"広島県東広島市西条町寺家513","area":"西条","category":"福祉・医療施設","wheel_spaces":13,"plus_one_spaces":null,"lat":34.44837904691745,"lon":132.72338259880766,"confirmed_at":"2026-10-13T23:21:16","review_origin":"seed_13"},{"id":"hiroshima-2026-34","name":"浅倉歯科医院","address":"広島県東広島市高屋町造賀3595-2","raw_name":"浅倉歯科医院","raw_address":"広島県東広島市高屋町造賀3595-2","area":"高屋","category":"福祉・医療施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.4829601358768,"lon":132.76068253050002,"confirmed_at":"2026-11-01T11:26:59","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-35","name":"総合福祉センター","address":"広島県東広島市西条町土与丸1108","raw_name":"総合福祉センター","raw_address":"広島県東広島市西条町土与丸1108","area":"西条","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":1,"lat":34.42474168280747,"lon":132.75274507953606,"confirmed_at":"2026-11-01T11:27:30","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-36","name":"黒瀬保健福祉センター","address":"広島県東広島市黒瀬町丸山1286-1","raw_name":"黒瀬保健福祉センター","raw_address":"広島県東広島市黒瀬町丸山1286-1","area":"黒瀬","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":1,"lat":34.324691094716336,"lon":132.67679823406607,"confirmed_at":"2026-11-01T11:29:39","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-37","name":"豊栄保健福祉センター","address":"広島県東広島市豊栄町乃美2841-1","raw_name":"豊栄保健福祉センター","raw_address":"広島県東広島市豊栄町乃美2841-1","area":"豊栄","category":"福祉・医療施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.563818706823795,"lon":132.8216595839596,"confirmed_at":"2026-11-01T11:29:59","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-38","name":"河内保健福祉センター","address":"広島県東広島市河内町中河内1206-1","raw_name":"河内保健福祉センター","raw_address":"広島県東広島市河内町中河内1206-1","area":"河内","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.471939612132175,"lon":132.88939002775916,"confirmed_at":"2026-11-01T11:30:28","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-39","name":"河内社会福祉会館","address":"広島県東広島市河内町中河内1232-4","raw_name":"河内社会福祉会館","raw_address":"広島県東広島市河内町中河内1232-4","area":"河内","category":"福祉・医療施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.470963687289505,"lon":132.89002326292487,"confirmed_at":"2026-11-01T11:30:52","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-40","name":"安芸津文化福祉センター","address":"広島県東広島市安芸津町三津4398","raw_name":"安芸津文化福祉センター","raw_address":"広島県東広島市安芸津町三津4398","area":"安芸津","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":2,"lat":34.319902934368415,"lon":132.81350922869493,"confirmed_at":"2026-11-01T11:31:26","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-41","name":"特別養護老人ホーム御薗寮","address":"広島県東広島市高屋町高屋堀3486","raw_name":"特別養護老人ホーム御薗寮","raw_address":"広島県東広島市高屋町高屋堀3486","area":"高屋","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.459441029582415,"lon":132.81053362475683,"confirmed_at":"2026-11-01T11:31:52","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-42","name":"障害福祉サービス事業所ウィング","address":"広島県東広島市八本松町米満461","raw_name":"障害福祉サービス事業所ウィング","raw_address":"広島県東広島市八本松町米満461","area":"八本松","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":5,"lat":34.4500515022425,"lon":132.72347602406438,"confirmed_at":"2026-11-01T11:32:22","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-43","name":"あきつ世代間交流センター","address":"広島県東広島市安芸津町三津5556-1","raw_name":"あきつ世代間交流センター","raw_address":"広島県東広島市安芸津町三津5556-1","area":"安芸津","category":"福祉・医療施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.319394932282485,"lon":132.81324341291636,"confirmed_at":"2026-11-01T11:32:46","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-44","name":"東広島保健医療センター","address":"広島県東広島市西条町土与丸1113","raw_name":"東広島保健医療センター","raw_address":"広島県東広島市西条町土与丸1113","area":"西条","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":1,"lat":34.4245419277456,"lon":132.75309645219127,"confirmed_at":"2026-11-01T11:33:23","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-45","name":"黒瀬児童館","address":"広島県東広島市黒瀬町丸山1450-1","raw_name":"黒瀬児童館","raw_address":"広島県東広島市黒瀬町丸山1450-1","area":"黒瀬","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.32449048263833,"lon":132.67227067319158,"confirmed_at":"2026-11-01T11:33:54","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-46","name":"勤労福祉センター","address":"広島県東広島市西条吉行東１丁目1-16","raw_name":"勤労福祉センター","raw_address":"広島県東広島市西条吉行東１丁目1-16","area":"西条","category":"福祉・医療施設","wheel_spaces":4,"plus_one_spaces":null,"lat":34.43265010015062,"lon":132.75802587386212,"confirmed_at":"2026-11-01T11:34:24","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-47","name":"のぞみ整形外科クリニック西条","address":"広島県東広島市西条町助実1182-1","raw_name":"のぞみ整形外科クリニック","raw_address":"広島県東広島市西条町助実1182-1","area":"西条","category":"福祉・医療施設","wheel_spaces":7,"plus_one_spaces":null,"lat":34.42501303162018,"lon":132.75558034344988,"confirmed_at":"2026-11-01T10:34:31","review_origin":"seed_13"},{"id":"hiroshima-2026-48","name":"ゆかわ脳神経外科クリニック","address":"広島県東広島市西条土与丸5丁目9番33号","raw_name":"ゆかわ脳神経外科クリニック","raw_address":"広島県東広島市西条土与丸5丁目9番33号","area":"西条","category":"福祉・医療施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.42852963957907,"lon":132.75275990967663,"confirmed_at":"2026-11-01T11:34:44","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-49","name":"のぞみ整形外科クリニック寺屋","address":"広島県東広島市西条町寺屋4720","raw_name":"のぞみ整形外科クリニック寺屋","raw_address":"広島県東広島市西条町寺屋4720","area":"西条","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":2,"lat":34.43693201113164,"lon":132.72284167445557,"confirmed_at":"2026-11-01T11:35:17","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-56","name":"教育センター　本館","address":"広島県東広島市八本松南1-2-1","raw_name":"教育センター　本館","raw_address":"広島県東広島市八本松南1-2-1","area":"八本松","category":"教育施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.44152338413575,"lon":132.6952011373719,"confirmed_at":"2026-11-01T11:35:41","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-57","name":"教育センター　特別支援教育棟","address":"広島県東広島市八本松南1-2-2","raw_name":"教育センター　特別支援教育棟","raw_address":"広島県東広島市八本松南1-2-2","area":"八本松","category":"教育施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.441532042219904,"lon":132.69519911300992,"confirmed_at":"2026-11-01T11:42:05","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-58","name":"東広島市天文台広場","address":"広島県東広島市西条町下三永695-1","raw_name":"東広島市天文台広場","raw_address":"広島県東広島市西条町下三永695-1","area":"西条","category":"教育施設","wheel_spaces":null,"plus_one_spaces":1,"lat":34.377350883614305,"lon":132.77676869971165,"confirmed_at":"2026-11-01T11:42:31","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-65","name":"憩いの森公園","address":"広島県東広島市西条町寺家941-17","raw_name":"憩いの森公園","raw_address":"広島県東広島市西条町寺家941-17","area":"西条","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":4,"plus_one_spaces":4,"lat":34.446789710680996,"lon":132.73822095022513,"confirmed_at":"2026-11-01T11:43:08","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-66","name":"道の駅　湖畔の里福富","address":"広島県東広島市福富町久芳1506","raw_name":"道の駅　湖畔の里福富","raw_address":"広島県東広島市福富町久芳1506","area":"福富","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":3,"plus_one_spaces":null,"lat":34.532966214787095,"lon":132.77515137064174,"confirmed_at":"2026-10-13T23:23:26","review_origin":"seed_13"},{"id":"hiroshima-2026-67","name":"東広島運動公園","address":"広島県東広島市西条町田口67-1","raw_name":"東広島運動公園","raw_address":"広島県東広島市西条町田口67-1","area":"西条","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":6,"plus_one_spaces":null,"lat":34.3805534620736,"lon":132.7314200961631,"confirmed_at":"2026-11-01T11:43:31","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-68","name":"黒瀬屋内プール","address":"広島県東広島市黒瀬町楢原18-4","raw_name":"黒瀬屋内プール","raw_address":"広島県東広島市黒瀬町楢原18-4","area":"黒瀬","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.332600207485015,"lon":132.67108077850583,"confirmed_at":"2026-10-13T23:26:28","review_origin":"seed_13"},{"id":"hiroshima-2026-69","name":"黒瀬市民グラウンド","address":"広島県東広島市黒瀬町津江575-2","raw_name":"黒瀬市民グラウンド","raw_address":"広島県東広島市黒瀬町津江575-2","area":"黒瀬","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":2,"plus_one_spaces":1,"lat":34.34631494721522,"lon":132.6178793595522,"confirmed_at":"2026-11-01T11:44:05","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-70","name":"黒瀬B&G海洋センター","address":"東広島市黒瀬町楢原10018番地4","raw_name":"黒瀬Ｂ＆Ｇ海洋センター","raw_address":"広島県東広島市黒瀬町楢原18-4","area":"黒瀬","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.3337576291371,"lon":132.66997717754543,"confirmed_at":"2026-11-01T11:44:37","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-71","name":"安芸津Ｂ＆Ｇ海洋センター","address":"広島県東広島市安芸津町風早3092-1","raw_name":"安芸津Ｂ＆Ｇ海洋センター","raw_address":"広島県東広島市安芸津町風早3092-1","area":"安芸津","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.31698475788121,"lon":132.80903690964473,"confirmed_at":"2026-11-01T11:45:00","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-72","name":"福富パークゴルフ場","address":"広島県東広島市福富町久芳4286-1","raw_name":"福富パークゴルフ場","raw_address":"広島県東広島市福富町久芳4286-1","area":"福富","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.53699058085348,"lon":132.77486596737668,"confirmed_at":"2026-11-01T11:45:37","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-73","name":"道の駅西条のん太の酒蔵","address":"広島県東広島市西条町寺家10020-43","raw_name":"道の駅西条のん太の酒蔵","raw_address":"広島県東広島市西条町寺家10020-43","area":"西条","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":3,"plus_one_spaces":null,"lat":34.43359503237307,"lon":132.70292077630435,"confirmed_at":"2026-11-01T11:46:10","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-80","name":"東広島市黒瀬文化会館","address":"広島県東広島市黒瀬町乃美尾890-1","raw_name":"東広島市黒瀬文化会館","raw_address":"広島県東広島市黒瀬町乃美尾890-1","area":"黒瀬","category":"文化施設・図書館","wheel_spaces":1,"plus_one_spaces":null,"lat":34.34217079195044,"lon":132.69250678496005,"confirmed_at":"2026-11-01T11:47:59","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-81","name":"東広島河内人権センター","address":"広島県東広島市河内町中河内1289-1","raw_name":"東広島河内人権センター","raw_address":"広島県東広島市河内町中河内1289-1","area":"河内","category":"文化施設・図書館","wheel_spaces":1,"plus_one_spaces":null,"lat":34.4703448,"lon":132.8921933,"confirmed_at":"2026-10-13T21:27:52","review_origin":"seed_13"},{"id":"hiroshima-2026-82","name":"東広島市指定重要文化財 旧石井家住宅","address":"広島県東広島市西条町下見1086-1","raw_name":"東広島市指定重要文化財旧石井家住宅","raw_address":"広島県東広島市西条町下見1086-1","area":"西条","category":"文化施設・図書館","wheel_spaces":1,"plus_one_spaces":1,"lat":34.413676,"lon":132.720398,"confirmed_at":"2026-10-13","review_origin":"seed_13"},{"id":"hiroshima-2026-83","name":"東広島市出土文化財管理センター","address":"広島県東広島市河内町中河内651-7","raw_name":"東広島市出土文化財管理センター","raw_address":"広島県東広島市河内町中河内651-7","area":"河内","category":"文化施設・図書館","wheel_spaces":2,"plus_one_spaces":2,"lat":34.468513141515515,"lon":132.89092257373298,"confirmed_at":"2026-11-01T11:48:19","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-84","name":"中央図書館","address":"広島県東広島市西条中央7丁目25-11","raw_name":"中央図書館","raw_address":"広島県東広島市西条中央7丁目25-11","area":"西条","category":"文化施設・図書館","wheel_spaces":5,"plus_one_spaces":null,"lat":34.41582624539252,"lon":132.73569995243258,"confirmed_at":"2026-11-01T11:49:32","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-91","name":"寺西地域センター","address":"広島県東広島市西条町寺家3166-1","raw_name":"寺西地域センター","raw_address":"広島県東広島市西条町寺家3166-1","area":"西条","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":3,"plus_one_spaces":null,"lat":34.4293253528573,"lon":132.71920545260872,"confirmed_at":"2026-11-01T11:50:01","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-92","name":"郷田地域センター","address":"広島県東広島市西条町郷曽11130-5","raw_name":"郷田地域センター","raw_address":"広島県東広島市西条町郷曽11130-5","area":"西条","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":3,"plus_one_spaces":null,"lat":34.37860096698428,"lon":132.71018616716583,"confirmed_at":"2026-11-01T11:50:21","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-93","name":"板城地域センター","address":"広島県東広島市西条町馬木565-1","raw_name":"板城地域センター","raw_address":"広島県東広島市西条町馬木565-1","area":"西条","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":1,"lat":34.370736060940864,"lon":132.7325932757926,"confirmed_at":"2026-11-01T11:51:12","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-94","name":"三永地域センター","address":"広島県東広島市西条町下三永10927-2","raw_name":"三永地域センター","raw_address":"広島県東広島市西条町下三永10927-2","area":"西条","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.393535359075294,"lon":132.77790878839835,"confirmed_at":"2026-11-01T11:52:41","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-95","name":"御薗宇地域センター","address":"広島県東広島市西条町御薗宇7200","raw_name":"御薗宇地域センター","raw_address":"広島県東広島市西条町御薗宇7200","area":"西条","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.408332540644345,"lon":132.7479847237411,"confirmed_at":"2026-11-01T11:53:06","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-96","name":"東西条地域センター","address":"広島県東広島市西条土与丸2-3-4","raw_name":"東西条地域センター","raw_address":"広島県東広島市西条土与丸2-3-4","area":"西条","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.431647923319424,"lon":132.75287773744316,"confirmed_at":"2026-11-01T11:55:14","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-97","name":"川上地域センター","address":"広島県東広島市八本松飯田8-19-49","raw_name":"川上地域センター","raw_address":"広島県東広島市八本松飯田8-19-49","area":"八本松","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":2,"lat":34.4546114240438,"lon":132.69846488242044,"confirmed_at":"2026-11-01T11:56:48","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-98","name":"吉川地域センター","address":"広島県東広島市八本松町吉川435-1","raw_name":"吉川地域センター","raw_address":"広島県東広島市八本松町吉川435-1","area":"八本松","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.39352049599422,"lon":132.67206747544714,"confirmed_at":"2026-11-01T11:57:11","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-99","name":"八本松地域センター","address":"広島県東広島市八本松南2-1-1","raw_name":"八本松地域センター","raw_address":"広島県東広島市八本松南2-1-1","area":"八本松","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.43877510251756,"lon":132.69354567355586,"confirmed_at":"2026-11-01T11:57:58","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-100","name":"東志和地域センター","address":"広島県東広島市志和町志和東3887-1","raw_name":"東志和地域センター","raw_address":"広島県東広島市志和町志和東3887-1","area":"志和","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":3,"plus_one_spaces":null,"lat":34.48032648300441,"lon":132.6810517315334,"confirmed_at":"2026-11-01T11:58:20","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-101","name":"志和堀地域センター","address":"広島県東広島市志和町志和堀857","raw_name":"志和堀地域センター","raw_address":"広島県東広島市志和町志和堀857","area":"志和","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.507916481003626,"lon":132.6725004443592,"confirmed_at":"2026-11-01T11:59:02","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-102","name":"高屋西地域センター","address":"広島県東広島市高屋町杵原1276","raw_name":"高屋西地域センター","raw_address":"広島県東広島市高屋町杵原1276","area":"高屋","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.44929473108289,"lon":132.78439932431135,"confirmed_at":"2026-11-01T12:01:16","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-103","name":"小谷地域センター","address":"広島県東広島市高屋町小谷5560","raw_name":"小谷地域センター","raw_address":"広島県東広島市高屋町小谷5560","area":"高屋","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.43674515993429,"lon":132.84230693122927,"confirmed_at":"2026-11-01T12:21:16","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-104","name":"造賀地域センター","address":"広島県東広島市高屋町造賀3638-1","raw_name":"造賀地域センター","raw_address":"広島県東広島市高屋町造賀3638-1","area":"高屋","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.48650140121753,"lon":132.7614421606528,"confirmed_at":"2026-11-01T12:22:58","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-105","name":"高美が丘地域センター","address":"広島県東広島市高屋高美が丘4-34-2","raw_name":"高美が丘地域センター","raw_address":"広島県東広島市高屋高美が丘4-34-2","area":"高屋","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.46046089162416,"lon":132.79224412316012,"confirmed_at":"2026-11-01T12:24:46","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-106","name":"竹仁地域センター","address":"広島県東広島市福富町下竹仁501-11","raw_name":"竹仁地域センター","raw_address":"広島県東広島市福富町下竹仁501-11","area":"福富","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.52767292499443,"lon":132.74011401199616,"confirmed_at":"2026-11-01T12:25:42","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-107","name":"上戸野地域センター","address":"広島県東広島市福富町上戸野2555-1","raw_name":"上戸野地域センター","raw_address":"広島県東広島市福富町上戸野2555-1","area":"福富","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":3,"plus_one_spaces":1,"lat":34.51450893736099,"lon":132.78050600751487,"confirmed_at":"2026-11-01T12:26:22","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-108","name":"清武西地域センター","address":"広島県東広島市豊栄町清武3756-1","raw_name":"清武西地域センター","raw_address":"広島県東広島市豊栄町清武3756-1","area":"豊栄","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.59461277671077,"lon":132.81372680558917,"confirmed_at":"2026-11-01T12:27:06","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-109","name":"清武地域センター","address":"広島県東広島市豊栄町鍛冶屋603","raw_name":"清武地域センター","raw_address":"広島県東広島市豊栄町鍛冶屋603","area":"豊栄","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.569114596854845,"lon":132.82405457140104,"confirmed_at":"2026-11-01T12:28:53","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-110","name":"安宿地域センター","address":"広島県東広島市豊栄町安宿3876-1","raw_name":"安宿地域センター","raw_address":"広島県東広島市豊栄町安宿3876-1","area":"豊栄","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.5640781713616,"lon":132.84773517453772,"confirmed_at":"2026-11-01T12:30:00","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-111","name":"乃美地域センター","address":"広島県東広島市豊栄町乃美3163","raw_name":"乃美地域センター","raw_address":"広島県東広島市豊栄町乃美3163","area":"豊栄","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":2,"lat":34.566906809915444,"lon":132.81172832678385,"confirmed_at":"2026-11-01T12:31:17","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-112","name":"吉原地域センター","address":"広島県東広島市豊栄町吉原2243-1","raw_name":"吉原地域センター","raw_address":"広島県東広島市豊栄町吉原2243-1","area":"豊栄","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.6034480327586,"lon":132.8627965865715,"confirmed_at":"2026-11-01T12:32:21","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-113","name":"入野地域センター","address":"広島県東広島市河内町入野2650-3","raw_name":"入野地域センター","raw_address":"広島県東広島市河内町入野2650-3","area":"河内","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":1,"lat":34.441050002668256,"lon":132.8592270725989,"confirmed_at":"2026-11-01T12:32:45","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-114","name":"小田地域センター","address":"広島県東広島市河内町小田2182","raw_name":"小田地域センター","raw_address":"広島県東広島市河内町小田2182","area":"河内","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.50609490808201,"lon":132.87273956524683,"confirmed_at":"2026-11-01T12:34:08","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-115","name":"風早地域センター","address":"広島県東広島市安芸津町風早1214-1","raw_name":"風早地域センター","raw_address":"広島県東広島市安芸津町風早1214-1","area":"安芸津","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.31358560840419,"lon":132.7940922889014,"confirmed_at":"2026-11-01T12:34:57","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-116","name":"乃美尾会館","address":"広島県東広島市黒瀬町乃美尾2131-1","raw_name":"乃美尾会館","raw_address":"広島県東広島市黒瀬町乃美尾2131-1","area":"黒瀬","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.33214627490691,"lon":132.69524477654926,"confirmed_at":"2026-11-01T12:35:43","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-117","name":"西志和地域センター","address":"広島県東広島市志和町七条椛坂1737-1","raw_name":"西志和地域センター","raw_address":"広島県東広島市志和町七条椛坂1737-1","area":"志和","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.48032957842801,"lon":132.68105100696354,"confirmed_at":"2026-11-01T12:36:09","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-118","name":"東広島市黒瀬生涯学習センター","address":"広島県東広島市黒瀬町菅田10","raw_name":"東広島市黒瀬生涯学習センター","raw_address":"広島県東広島市黒瀬町菅田10","area":"黒瀬","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.323724150992604,"lon":132.67090558659885,"confirmed_at":"2026-11-01T12:37:49","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-119","name":"三ツ城地域センター（下見福祉会館）","address":"広島県東広島市西条町下見5-4-8","raw_name":"三ツ城地域センター（下見福祉会館）","raw_address":"広島県東広島市西条町下見5-4-8","area":"西条","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":3,"plus_one_spaces":null,"lat":34.41175977006557,"lon":132.71708233052448,"confirmed_at":"2026-11-01T12:38:19","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-120","name":"能良地域センター","address":"広島県東広島市豊栄町能良1574-1","raw_name":"能良地域センター","raw_address":"広島県東広島市豊栄町能良1574-1","area":"豊栄","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.53853280153335,"lon":132.8252486297416,"confirmed_at":"2026-11-01T12:38:54","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-121","name":"高屋東地域センター","address":"広島県東広島市高屋町白市550","raw_name":"高屋東地域センター","raw_address":"広島県東広島市高屋町白市550","area":"高屋","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.45693314683726,"lon":132.81858359027217,"confirmed_at":"2026-11-01T12:40:10","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-128","name":"西部畜産事務所","address":"広島県東広島市西条御条町1-15","raw_name":"西部畜産事務所","raw_address":"広島県東広島市西条御条町1-15","area":"西条","category":"生活・経済関連施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.42551124953185,"lon":132.74518971332532,"confirmed_at":"2026-11-01T12:40:35","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-129","name":"海辺の里おおしば","address":"広島県東広島市安芸津町風早2514-1","raw_name":"海辺の里おおしば","raw_address":"広島県東広島市安芸津町風早2514-1","area":"安芸津","category":"生活・経済関連施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.27066719995531,"lon":132.7996599335239,"confirmed_at":"2026-11-01T12:41:26","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-130","name":"テクノタウン東広島集会所","address":"広島県東広島市西大沢1丁目31-3","raw_name":"テクノタウン東広島集会所","raw_address":"広島県東広島市西大沢1丁目31-3","area":"その他","category":"生活・経済関連施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.37261361520981,"lon":132.72537320485125,"confirmed_at":"2026-11-01T12:42:42","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-131","name":"広島中央エコパーク","address":"東広島市西条町上三永10759番地2","raw_name":"中央エコパーク管理棟","raw_address":"広島県東広島市西条町上三永10759-2","area":"西条","category":"生活・経済関連施設","wheel_spaces":2,"plus_one_spaces":1,"lat":34.4088699965532,"lon":132.78718690255567,"confirmed_at":"2026-11-01T12:43:37","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-138","name":"ひがしひろしま聖苑","address":"東広島市八本松町宗吉10056番地","raw_name":"ひがしひろしま聖苑","raw_address":"広島県東広島市八本松町宗吉56","area":"八本松","category":"斎場・霊園等","wheel_spaces":3,"plus_one_spaces":null,"lat":34.463287218993315,"lon":132.69014395371497,"confirmed_at":"2026-11-01T12:44:44","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-139","name":"ひがしひろしま墓園","address":"広島県東広島市八本松町宗吉56","raw_name":"ひがしひろしま墓園","raw_address":"広島県東広島市八本松町宗吉56","area":"八本松","category":"斎場・霊園等","wheel_spaces":3,"plus_one_spaces":1,"lat":34.46329245457173,"lon":132.69014923272238,"confirmed_at":"2026-11-01T12:45:08","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-146","name":"福富物産しゃくなげ館","address":"広島県東広島市福富町下竹仁470-1","raw_name":"福富物産しゃくなげ館","raw_address":"広島県東広島市福富町下竹仁470-1","area":"福富","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":2,"plus_one_spaces":1,"lat":34.52573819518006,"lon":132.7428083252802,"confirmed_at":"2026-11-01T12:45:57","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-147","name":"ゆめタウン　黒瀬","address":"広島県東広島市黒瀬町楢原100-1","raw_name":"ゆめタウン　黒瀬","raw_address":"広島県東広島市黒瀬町楢原100-1","area":"黒瀬","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":6,"plus_one_spaces":2,"lat":34.32409572073156,"lon":132.66590172674523,"confirmed_at":"2026-11-01T12:46:26","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-148","name":"ゆめタウン　東広島","address":"広島県東広島市西条土与丸1-5-7","raw_name":"ゆめタウン　東広島","raw_address":"広島県東広島市西条土与丸1-5-7","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":5,"plus_one_spaces":null,"lat":34.42695244430235,"lon":132.75062429331265,"confirmed_at":"2026-11-01T12:48:06","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-149","name":"フジグラン　東広島","address":"広島県東広島市西条町御薗宇4405","raw_name":"フジグラン　東広島","raw_address":"広島県東広島市西条町御薗宇4405","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":19,"plus_one_spaces":null,"lat":34.40777209167004,"lon":132.74954311296526,"confirmed_at":"2026-11-01T12:48:28","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-150","name":"ユーホー　東広島店","address":"広島県東広島市西条町御薗宇4272","raw_name":"ユーホー　東広島店","raw_address":"広島県東広島市西条町御薗宇4272","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":3,"plus_one_spaces":null,"lat":34.40523814770386,"lon":132.75086084620136,"confirmed_at":"2026-11-01T12:48:52","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-151","name":"あおぞらぱん屋さん 白市店","address":"広島県東広島市高屋町小谷2921-1","raw_name":"あおぞらぱん屋さん","raw_address":"広島県東広島市高屋町小谷2921-1","area":"高屋","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":2,"plus_one_spaces":null,"lat":34.443681120724335,"lon":132.82986417381179,"confirmed_at":"2026-11-01T12:49:52","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-152","name":"ココカラファイン　白市駅前","address":"広島県東広島市高屋町小谷3279-1","raw_name":"ドラッグセガミ　白市駅前","raw_address":"広島県東広島市高屋町小谷3279-1","area":"高屋","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":1,"plus_one_spaces":1,"lat":34.445836229725934,"lon":132.8290084366129,"confirmed_at":"2026-11-01T10:36:17","review_origin":"seed_13"},{"id":"hiroshima-2026-153","name":"ゆめタウン　学園店","address":"広島県東広島市西条下見6-2-32","raw_name":"ゆめタウン　学園店","raw_address":"広島県東広島市西条下見6-2-32","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":7,"plus_one_spaces":null,"lat":34.40856782037032,"lon":132.714156178191,"confirmed_at":"2026-11-01T12:50:24","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-154","name":"ゆめマート　八本松","address":"広島県東広島市八本松東3-10-2","raw_name":"ゆめマート　八本松","raw_address":"広島県東広島市八本松東3-10-2","area":"八本松","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":2,"plus_one_spaces":1,"lat":34.446265609673254,"lon":132.70871042573322,"confirmed_at":"2026-11-01T12:50:54","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-155","name":"ショージ　八本松南店","address":"広島県東広島市八本松南2-18-14","raw_name":"ショージ　八本松南店","raw_address":"広島県東広島市八本松南2-18-14","area":"八本松","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":2,"plus_one_spaces":1,"lat":34.43936764708389,"lon":132.6965588610135,"confirmed_at":"2026-11-01T12:51:21","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-156","name":"ショージ　下見店","address":"広島県東広島市西条町下見4625-1","raw_name":"ショージ　下見店","raw_address":"広島県東広島市西条町下見4625-1","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":2,"plus_one_spaces":1,"lat":34.407465316999726,"lon":132.70709761370082,"confirmed_at":"2026-11-01T12:51:41","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-157","name":"ベッセルホテル　東広島","address":"広島県東広島市三永2-6-36","raw_name":"ベッセルホテル　東広島","raw_address":"広島県東広島市三永2-6-36","area":"その他","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":1,"plus_one_spaces":1,"lat":34.38802782841041,"lon":132.76134644673303,"confirmed_at":"2026-11-01T12:52:05","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-158","name":"ローソン　東広島高屋町桧山店","address":"広島県東広島市高屋町檜山258-1","raw_name":"ローソン　東広島高屋町桧山店","raw_address":"広島県東広島市高屋町檜山258-1","area":"高屋","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":1,"plus_one_spaces":null,"lat":34.440200266656554,"lon":132.7651369076517,"confirmed_at":"2026-11-01T12:52:26","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-159","name":"ローソン東広島西条御薗宇店","address":"広島県東広島市西条町御薗宇字上神田6200-2","raw_name":"ローソン　東広島西条御薗宇店","raw_address":"広島県東広島市西条町御薗宇字上神田6200-2","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":1,"plus_one_spaces":null,"lat":34.41463173827281,"lon":132.7523498002776,"confirmed_at":"2026-10-13T21:29:01","review_origin":"seed_13"},{"id":"hiroshima-2026-160","name":"ミスターマックス　八本松店","address":"広島県東広島市八本松西1-12-23","raw_name":"ミスターマックス　八本松店","raw_address":"広島県東広島市八本松西1-12-23","area":"八本松","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":2,"plus_one_spaces":null,"lat":34.44506705378046,"lon":132.68167940142183,"confirmed_at":"2026-11-01T12:52:48","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-161","name":"藤三 黒瀬店","address":"広島県東広島市黒瀬町丸山1240番1号","raw_name":"ビッグハウス　黒瀬店","raw_address":"広島県東広島市黒瀬町丸山1240","area":"黒瀬","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":4,"plus_one_spaces":null,"lat":34.32438825587193,"lon":132.67531254934295,"confirmed_at":"2026-11-01T12:54:29","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-162","name":"マックスバリュ　西条西店","address":"広島県東広島市西条町寺家3791-1","raw_name":"マックスバリュ　西条西店","raw_address":"広島県東広島市西条町寺家3791-1","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":2,"plus_one_spaces":null,"lat":34.439160242247844,"lon":132.72044042419085,"confirmed_at":"2026-11-01T12:54:58","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-163","name":"マックスバリュ　高屋店","address":"広島県東広島市高屋町杵原1776","raw_name":"マックスバリュ　高屋店","raw_address":"広島県東広島市高屋町杵原1776","area":"高屋","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":2,"plus_one_spaces":null,"lat":34.45347378996906,"lon":132.78708680825434,"confirmed_at":"2026-11-01T12:55:25","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-164","name":"フレスタ　西条店","address":"広島県東広島市西条中央4-1-1","raw_name":"フレスタ　西条店","raw_address":"広島県東広島市西条中央4-1-1","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":3,"plus_one_spaces":null,"lat":34.41459848431763,"lon":132.7434072254259,"confirmed_at":"2026-11-01T12:55:48","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-165","name":"中国労働金庫　西条支店","address":"広島県東広島市西条大坪町1-36","raw_name":"中国労働金庫　西条支店","raw_address":"広島県東広島市西条大坪町1-36","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":1,"plus_one_spaces":null,"lat":34.42450660278715,"lon":132.74715695980532,"confirmed_at":"2026-11-01T12:56:28","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-166","name":"ケーズデンキ東広島店","address":"広島県東広島市西条町助実1232","raw_name":"ケーズデンキ東広島店","raw_address":"広島県東広島市西条町助実","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":5,"plus_one_spaces":3,"lat":34.422406821745305,"lon":132.7569728817319,"confirmed_at":"2026-10-13T23:30:35","review_origin":"seed_13"},{"id":"hiroshima-2026-167","name":"東広島グリーンホテルモーリス","address":"広島県東広島市西条昭和町11-8","raw_name":"東広島グリーンホテルモーリス","raw_address":"広島県東広島市西条昭和町11-8","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":3,"plus_one_spaces":2,"lat":34.42339144932767,"lon":132.74228020820377,"confirmed_at":"2026-11-01T12:57:39","review_origin":"manual_review_20261101"}],"source_description":"広島県「思いやり駐車場利用証交付制度」の協力施設一覧を基礎台帳として使用。施設名・住所・地域・施設種別・車いす等区画数・プラスワン区画数を保持。","terminology":{"source_original":"原典＝107施設を選ぶ基礎になった一覧情報","canonical_master":"原本＝手作業で位置確認を終え、このロールアウト版で固定した107登録地点"},"ui_principle":"空間認知の連続性：情報表示で地図を自動移動しない。地点情報カードは対象点の真上を避け、約60pxの適度な距離を保って左右の空き側へ初期配置する。画面中央線をまたぐことは許容し、カードは地図内で自由にドラッグできる。接続線は対象点との上下関係に応じてカード上辺または下辺へ接続する。"}</script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
 <script>
 if(typeof window.L==='undefined')document.write('<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"><\/script>');
@@ -515,6 +586,253 @@ function renderComments(type,id){
   return '<div class="comments">'+arr.slice(0,4).map(c=>`<div class="comment">${esc(c.text)}<time>${esc(new Date(c.created_at).toLocaleString('ja-JP'))}</time></div>`).join('')+(arr.length>4?`<div class="comment">ほか ${arr.length-4}件</div>`:'')+'</div>';
 }
 function linkedAdds(id){return state.points.filter(p=>p.linked_facility_id===id)}
+
+
+let spatialState={
+  marker:null,html:'',card:null,line:null,raf:0,
+  userMoved:false,left:null,top:null,
+  dragging:false,pointerId:null,startX:0,startY:0,startLeft:0,startTop:0
+};
+
+function closeSpatialCard(){
+  if(spatialState.raf){cancelAnimationFrame(spatialState.raf);spatialState.raf=0}
+  if(spatialState.card&&spatialState.card.parentNode)spatialState.card.parentNode.removeChild(spatialState.card);
+  if(spatialState.line&&spatialState.line.parentNode)spatialState.line.parentNode.removeChild(spatialState.line);
+  spatialState={
+    marker:null,html:'',card:null,line:null,raf:0,
+    userMoved:false,left:null,top:null,
+    dragging:false,pointerId:null,startX:0,startY:0,startLeft:0,startTop:0
+  };
+}
+
+function clampNumber(v,min,max){return Math.max(min,Math.min(max,v))}
+
+function defaultSideCardPosition(marker,card){
+  const size=map.getSize();
+  const pt=map.latLngToContainerPoint(marker.getLatLng());
+  const w=card.offsetWidth,h=card.offsetHeight;
+  const margin=14;
+  const preferredGap=60;
+
+  // Start close enough to preserve spatial relationship, but leave enough
+  // surrounding map visible around the selected point.
+  const rightLeft=pt.x+preferredGap;
+  const leftLeft=pt.x-preferredGap-w;
+  const fitsRight=rightLeft+w<=size.x-margin;
+  const fitsLeft=leftLeft>=margin;
+
+  let left;
+  if(fitsRight&&fitsLeft){
+    // Prefer the side with more usable space.
+    const spaceRight=size.x-pt.x;
+    const spaceLeft=pt.x;
+    left=spaceRight>=spaceLeft?rightLeft:leftLeft;
+  }else if(fitsRight){
+    left=rightLeft;
+  }else if(fitsLeft){
+    left=leftLeft;
+  }else{
+    // Narrow viewport: choose the less-clipped side and clamp inside the map.
+    const rightOverflow=Math.max(0,rightLeft+w-(size.x-margin));
+    const leftOverflow=Math.max(0,margin-leftLeft);
+    left=rightOverflow<=leftOverflow?rightLeft:leftLeft;
+    left=clampNumber(left,margin,Math.max(margin,size.x-w-margin));
+  }
+
+  // Keep the card vertically near the selected point.
+  const top=clampNumber(
+    pt.y-h/2,
+    margin,
+    Math.max(margin,size.y-h-margin)
+  );
+
+  return {left,top};
+}
+
+function layoutSpatialCard(){
+  spatialState.raf=0;
+  const {marker,card,line}=spatialState;
+  if(!marker||!card||!line)return;
+
+  const mapEl=map.getContainer();
+  const size=map.getSize();
+  const pt=map.latLngToContainerPoint(marker.getLatLng());
+
+  // Close only when the selected point is clearly outside the visible map.
+  if(pt.x<-40||pt.y<-40||pt.x>size.x+40||pt.y>size.y+40){closeSpatialCard();return}
+
+  const w=card.offsetWidth,h=card.offsetHeight;
+  const margin=12;
+
+  let left,top;
+  if(spatialState.userMoved && Number.isFinite(spatialState.left) && Number.isFinite(spatialState.top)){
+    left=clampNumber(spatialState.left,margin,Math.max(margin,size.x-w-margin));
+    top=clampNumber(spatialState.top,margin,Math.max(margin,size.y-h-margin));
+    spatialState.left=left;
+    spatialState.top=top;
+  }else{
+    const pos=defaultSideCardPosition(marker,card);
+    left=pos.left;top=pos.top;
+  }
+
+  card.style.left=`${left}px`;
+  card.style.top=`${top}px`;
+
+  // Connect only to the card's top or bottom edge.
+  // This keeps the line visually outside the card body and avoids a side-entry line
+  // cutting across the central recognition area.
+  const cardCenterY=top+h/2;
+  const useTop=pt.y<=cardCenterY;
+  const edgeY=useTop?top:top+h;
+  const edgeX=clampNumber(pt.x,left+18,left+w-18);
+
+  let dx=edgeX-pt.x,dy=edgeY-pt.y;
+  let len=Math.hypot(dx,dy);
+
+  if(len<6){
+    line.style.display='none';
+    return;
+  }
+
+  line.style.display='block';
+  const ux=dx/len,uy=dy/len;
+  const startX=pt.x+ux*7,startY=pt.y+uy*7;
+  len=Math.max(0,len-11);
+
+  line.style.left=`${startX}px`;
+  line.style.top=`${startY}px`;
+  line.style.width=`${len}px`;
+  line.style.transform=`rotate(${Math.atan2(dy,dx)*180/Math.PI}deg)`;
+}
+
+function scheduleSpatialLayout(){
+  if(!spatialState.marker||spatialState.raf)return;
+  spatialState.raf=requestAnimationFrame(layoutSpatialCard);
+}
+
+function beginCardDrag(e){
+  if(!spatialState.card)return;
+  if(e.target&&e.target.closest&&e.target.closest('button,a,input,select,textarea'))return;
+  if(e.button!==undefined && e.button!==0)return;
+
+  const card=spatialState.card;
+  spatialState.dragging=true;
+  spatialState.pointerId=e.pointerId;
+  spatialState.startX=e.clientX;
+  spatialState.startY=e.clientY;
+  spatialState.startLeft=parseFloat(card.style.left)||0;
+  spatialState.startTop=parseFloat(card.style.top)||0;
+
+  if(e.currentTarget.setPointerCapture && e.pointerId!==undefined){
+    try{e.currentTarget.setPointerCapture(e.pointerId)}catch(_){}
+  }
+  e.preventDefault();
+  e.stopPropagation();
+}
+
+function moveCardDrag(e){
+  if(!spatialState.dragging||!spatialState.card)return;
+  if(spatialState.pointerId!==null && e.pointerId!==undefined && e.pointerId!==spatialState.pointerId)return;
+
+  const size=map.getSize();
+  const card=spatialState.card;
+  const w=card.offsetWidth,h=card.offsetHeight;
+  const margin=12;
+
+  // After opening, the user may place the card anywhere inside the map.
+  const left=clampNumber(
+    spatialState.startLeft+(e.clientX-spatialState.startX),
+    margin,
+    Math.max(margin,size.x-w-margin)
+  );
+  const top=clampNumber(
+    spatialState.startTop+(e.clientY-spatialState.startY),
+    margin,
+    Math.max(margin,size.y-h-margin)
+  );
+
+  spatialState.userMoved=true;
+  spatialState.left=left;
+  spatialState.top=top;
+  card.style.left=`${left}px`;
+  card.style.top=`${top}px`;
+  layoutSpatialCard();
+
+  e.preventDefault();
+  e.stopPropagation();
+}
+
+function endCardDrag(e){
+  if(!spatialState.dragging)return;
+  if(spatialState.pointerId!==null && e.pointerId!==undefined && e.pointerId!==spatialState.pointerId)return;
+
+  spatialState.dragging=false;
+  spatialState.pointerId=null;
+  e.preventDefault();
+  e.stopPropagation();
+}
+
+function showSpatialCard(marker,html){
+  closeSpatialCard();
+  const mapEl=map.getContainer();
+
+  const line=document.createElement('div');
+  line.className='spatial-connector';
+
+  const card=document.createElement('div');
+  card.className='spatial-card';
+  card.setAttribute('role','dialog');
+  card.setAttribute('aria-label','地点情報');
+
+  const dragbar=document.createElement('div');
+  dragbar.className='spatial-card-dragbar';
+  dragbar.innerHTML='<span>↔ ドラッグして移動</span>';
+
+  const close=document.createElement('button');
+  close.type='button';
+  close.className='spatial-card-close';
+  close.setAttribute('aria-label','地点情報を閉じる');
+  close.textContent='×';
+
+  const body=document.createElement('div');
+  body.className='spatial-card-body';
+  body.innerHTML=html;
+
+  dragbar.append(close);
+  card.append(dragbar,body);
+  mapEl.append(line,card);
+
+  L.DomEvent.disableClickPropagation(card);
+  L.DomEvent.disableScrollPropagation(card);
+
+  // Prevent the close button from starting the drag gesture on its parent bar.
+  close.addEventListener('pointerdown',e=>{
+    e.preventDefault();
+    e.stopPropagation();
+  });
+  close.addEventListener('pointerup',e=>{
+    e.preventDefault();
+    e.stopPropagation();
+  });
+  close.addEventListener('click',e=>{
+    e.preventDefault();
+    e.stopPropagation();
+    closeSpatialCard();
+  });
+
+  dragbar.addEventListener('pointerdown',beginCardDrag);
+  dragbar.addEventListener('pointermove',moveCardDrag);
+  dragbar.addEventListener('pointerup',endCardDrag);
+  dragbar.addEventListener('pointercancel',endCardDrag);
+
+  spatialState={
+    marker,html,card,line,raf:0,
+    userMoved:false,left:null,top:null,
+    dragging:false,pointerId:null,startX:0,startY:0,startLeft:0,startTop:0
+  };
+
+  layoutSpatialCard();
+}
 
 function canonicalPopup(p){
   const linked=linkedAdds(p.id);
@@ -653,15 +971,24 @@ function pointIcon(kind){
 function openCanonical(id,pan){
   const p=byId[id]; if(!p)return;
   selectedId=id;renderList();
-  const m=canonicalMarkers[id];
-  if(m){if(pan)map.setView([p.lat,p.lon],Math.max(map.getZoom(),17));m.setPopupContent(canonicalPopup(p));m.openPopup()}
+  const m=canonicalMarkers[id]; if(!m)return;
+  if(pan){
+    closeSpatialCard();
+    const targetZoom=Math.max(map.getZoom(),17);
+    let shown=false;
+    const show=()=>{if(shown)return;shown=true;map.off('moveend',show);showSpatialCard(m,canonicalPopup(p))};
+    map.on('moveend',show);
+    map.setView([p.lat,p.lon],targetZoom);
+    setTimeout(show,120);
+  }else{
+    showSpatialCard(m,canonicalPopup(p));
+  }
 }
 function renderCanonical(){
   canonicalLayer.clearLayers();Object.keys(canonicalMarkers).forEach(k=>delete canonicalMarkers[k]);
   if(!$('canonicalOn').checked)return;
   for(const p of filtered){
     const m=L.marker([p.lat,p.lon],{icon:pointIcon('canonical'),title:p.name,keyboard:true,bubblingMouseEvents:false});
-    m.bindPopup(canonicalPopup(p),{maxWidth:380,minWidth:260,autoPan:true,autoPanPadding:[24,24],closeButton:true});
     m.bindTooltip(p.name,{direction:'top',className:'point-tooltip',offset:[0,-8],opacity:.98});
     m.on('mousedown touchstart',e=>{if(e&&e.originalEvent&&e.originalEvent.stopPropagation)e.originalEvent.stopPropagation()});
     m.on('click',e=>{
@@ -676,13 +1003,11 @@ function renderCommunity(){
   if(!$('communityOn').checked)return;
   for(const p of state.points){
     const m=L.marker([p.lat,p.lon],{icon:pointIcon('community'),title:p.name,keyboard:true,bubblingMouseEvents:false});
-    m.bindPopup(communityPopup(p),{maxWidth:380,minWidth:260,autoPan:true,autoPanPadding:[24,24],closeButton:true});
     m.bindTooltip(p.name,{direction:'top',className:'point-tooltip',offset:[0,-8],opacity:.98});
     m.on('mousedown touchstart',e=>{if(e&&e.originalEvent&&e.originalEvent.stopPropagation)e.originalEvent.stopPropagation()});
     m.on('click',e=>{
       if(e&&e.originalEvent&&e.originalEvent.stopPropagation)e.originalEvent.stopPropagation();
-      m.setPopupContent(communityPopup(p));
-      m.openPopup();
+      showSpatialCard(m,communityPopup(p));
     });
     m.addTo(communityLayer);communityMarkers[p.id]=m;
   }
@@ -794,6 +1119,7 @@ loadState();
 initFilters();
 
 map=L.map('map',{zoomControl:true,zoomAnimation:true,markerZoomAnimation:true,fadeAnimation:true});
+map.on('move zoom resize',scheduleSpatialLayout);
 if($('map').clientHeight<100){
   $('shareStatus').textContent='地図領域の高さを確保できませんでした。ページを再読み込みしてください。';
 }
@@ -808,8 +1134,8 @@ $('mapOpacity').addEventListener('input',()=>{tileLayer.setOpacity(Number($('map
 $('fitBtn').addEventListener('click',fitVisible);
 
 $('addPointBtn').addEventListener('click',()=>{if(addMode)stopAdd();else startAdd(null)});
-map.on('click',e=>{if(addMode)openAddModal(e.latlng)});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('addModal').hidden)closeAddModal();else if(addMode)stopAdd()}});
+map.on('click',e=>{if(addMode)openAddModal(e.latlng);else closeSpatialCard()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('addModal').hidden)closeAddModal();else if(addMode)stopAdd();else closeSpatialCard()}});
 $('saveAdd').addEventListener('click',saveAddedPoint);
 $('cancelAdd').addEventListener('click',()=>{closeAddModal();stopAdd()});
 $('addClose').addEventListener('click',()=>{closeAddModal();stopAdd()});

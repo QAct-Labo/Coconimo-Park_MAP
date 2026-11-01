@@ -1,0 +1,835 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>東広島 車いす駐車環境 調査MAP | Rollout v1.1.1</title>
+<style id="leaflet-layout-css">
+/* Facility3 Core Leaflet 1.9.x layout CSS: embedded locally to avoid partial CDN CSS failures.
+   Compatible subset of BSD-2-Clause Leaflet styles. JavaScript runtime uses Leaflet 1.9.4.
+   The inline rules intentionally cover tile positioning, layers, markers, overlays and controls. */
+.leaflet-container{position:relative;overflow:hidden;outline:0;cursor:grab;-webkit-tap-highlight-color:transparent;background:#e5ece8}
+.leaflet-container *,.leaflet-container *::before,.leaflet-container *::after{box-sizing:content-box}
+.leaflet-container.leaflet-dragging,.leaflet-container.leaflet-dragging .leaflet-grab{cursor:grabbing}
+.leaflet-container.leaflet-touch-drag{touch-action:none}
+.leaflet-container.leaflet-touch-zoom{touch-action:pan-x pan-y}
+.leaflet-pane,.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-tile-container,.leaflet-pane>svg,.leaflet-pane>canvas,.leaflet-zoom-box,.leaflet-image-layer,.leaflet-layer{position:absolute;left:0;top:0}
+.leaflet-map-pane{z-index:auto}
+.leaflet-tile-pane{z-index:200}.leaflet-overlay-pane{z-index:400}.leaflet-shadow-pane{z-index:500}.leaflet-marker-pane{z-index:600}.leaflet-tooltip-pane{z-index:650}.leaflet-popup-pane{z-index:700}
+.leaflet-tile{border:0;visibility:hidden;width:256px;height:256px;max-width:none!important;max-height:none!important;user-select:none;-webkit-user-drag:none}
+.leaflet-tile-loaded{visibility:inherit}
+.leaflet-tile-container{pointer-events:none;will-change:transform}
+.leaflet-zoom-animated{transform-origin:0 0}
+.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-image-layer,.leaflet-pane>svg path,.leaflet-pane>canvas{user-select:none;-webkit-user-drag:none}
+.leaflet-marker-icon,.leaflet-marker-shadow{display:block;max-width:none!important;max-height:none!important}
+.leaflet-container img.leaflet-tile,.leaflet-container .leaflet-marker-pane img,.leaflet-container .leaflet-shadow-pane img,.leaflet-container .leaflet-image-layer,.leaflet-container .leaflet-tile-pane img{max-width:none!important;max-height:none!important}
+.leaflet-container img.leaflet-image-layer{max-width:none!important}
+.leaflet-container .leaflet-overlay-pane svg{max-width:none!important;max-height:none!important}
+.leaflet-container .leaflet-marker-pane img{margin:0;padding:0}
+.leaflet-interactive{cursor:pointer}
+.leaflet-container .leaflet-control-attribution{font:11px/1.45 Arial,Helvetica,sans-serif;color:#333}
+.leaflet-container a{color:#0078a8;text-decoration:none}
+.leaflet-container a:hover{text-decoration:underline}
+.leaflet-control-container .leaflet-top,.leaflet-control-container .leaflet-bottom{position:absolute;z-index:1000;pointer-events:none}
+.leaflet-top{top:0}.leaflet-right{right:0}.leaflet-bottom{bottom:0}.leaflet-left{left:0}
+.leaflet-control{position:relative;z-index:800;pointer-events:auto;float:left;clear:both}
+.leaflet-top .leaflet-control{margin-top:10px}.leaflet-bottom .leaflet-control{margin-bottom:10px}
+.leaflet-left .leaflet-control{margin-left:10px}.leaflet-right .leaflet-control{margin-right:10px;float:right}
+.leaflet-bar{border:2px solid rgba(0,0,0,.20);border-radius:4px;box-shadow:0 1px 5px rgba(0,0,0,.35)}
+.leaflet-bar a{display:block;width:30px;height:30px;line-height:30px;text-align:center;text-decoration:none;font: bold 20px/30px Arial,Helvetica,sans-serif;background:white;color:#222;border-bottom:1px solid #ccc}
+.leaflet-bar a:first-child{border-radius:4px 4px 0 0}.leaflet-bar a:last-child{border-bottom:none;border-radius:0 0 4px 4px}
+.leaflet-bar a:hover{background:#f4f4f4;text-decoration:none}.leaflet-bar a.leaflet-disabled{cursor:default;background:#f4f4f4;color:#bbb}
+.leaflet-control-attribution{background:rgba(255,255,255,.82);margin:0!important;padding:0 5px}
+.leaflet-popup{position:absolute;text-align:center;margin-bottom:20px}
+.leaflet-popup-content-wrapper{padding:1px;text-align:left;border-radius:10px;background:white;box-shadow:0 3px 14px rgba(0,0,0,.35)}
+.leaflet-popup-content{margin:13px 20px;line-height:1.35;min-width:110px;font-size:12px}
+.leaflet-popup-tip-container{width:40px;height:20px;position:absolute;left:50%;margin-left:-20px;overflow:hidden;pointer-events:none}
+.leaflet-popup-tip{width:17px;height:17px;padding:1px;margin:-10px auto 0;background:#fff;transform:rotate(45deg);box-shadow:0 3px 14px rgba(0,0,0,.3)}
+.leaflet-popup-close-button{position:absolute;right:0;top:0;padding:4px 4px 0 0;width:18px;height:18px;font-size:20px;line-height:18px;text-align:center;text-decoration:none;font-weight:bold;color:#777}
+.leaflet-popup-close-button:hover{color:#333}.leaflet-popup-pane{pointer-events:none}.leaflet-popup{pointer-events:auto}
+.leaflet-container .leaflet-control-zoom{border:2px solid #b6c9c2}
+/* Leaflet 1.9 native transitions: keep markers, tiles, popups and view synchronized. */
+.leaflet-fade-anim .leaflet-tile{will-change:opacity}
+.leaflet-fade-anim .leaflet-popup{opacity:0;transition:opacity .2s linear}
+.leaflet-fade-anim .leaflet-map-pane .leaflet-popup{opacity:1}
+.leaflet-zoom-anim .leaflet-zoom-animated{will-change:transform;transition:transform .25s cubic-bezier(0,0,.25,1)}
+.leaflet-zoom-anim .leaflet-tile,.leaflet-pan-anim .leaflet-tile{transition:none}
+.leaflet-zoom-anim .leaflet-zoom-hide{visibility:hidden}
+@media(prefers-reduced-motion:reduce){
+  .leaflet-zoom-anim .leaflet-zoom-animated,.leaflet-fade-anim .leaflet-popup{transition:none}
+}
+</style>
+<style>
+:root{
+  --ink:#173e39;--dark:#0d4038;--bg:#f4f8f7;--line:#dce6e3;--muted:#5d706c;
+  --accent:#087460;--accent2:#2d6ca2;--orange:#dc8b20;--warn:#9d4f11;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;height:100%;font-family:system-ui,-apple-system,"Yu Gothic","Meiryo",sans-serif;color:var(--ink);background:var(--bg)}
+body{display:flex;flex-direction:column;overflow:hidden}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{color:#0c6958}
+header{flex:none;background:var(--dark);color:white;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+header h1{font-size:20px;margin:2px 0 3px}
+header p{font-size:11px;margin:0;color:#d0eee5}
+.version{font-size:10px;color:#badfd4;font-weight:750}
+.help-btn{border:1px solid #70a89a;background:#174d45;color:white;border-radius:8px;padding:7px 9px;font-weight:750;font-size:11px}
+.layout{display:grid;grid-template-columns:minmax(350px,410px) 1fr;flex:1;min-height:0}
+.sidebar{background:#fff;border-right:1px solid var(--line);min-height:0;overflow:hidden}
+.scroll{height:100%;overflow:auto;padding:12px 14px}
+.section{padding:11px 0;border-bottom:1px solid var(--line)}
+.section:first-child{padding-top:0}
+h2{font-size:14px;margin:4px 0 8px}
+.rollout-box{background:#eef8f5;border:1px solid #c9e5dc;border-radius:9px;padding:9px 10px;font-size:11px;line-height:1.55}
+.caution{background:#fff8ed;border:1px solid #efd2ae;border-radius:8px;padding:8px 9px;font-size:10.5px;line-height:1.55;margin-top:7px}
+.search,.field select,.coord-input,.text-input,.text-area{width:100%;border:1px solid #bdcec9;border-radius:7px;background:#fff;padding:8px;font-size:11px}
+.text-area{min-height:76px;resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:7px}
+.field{font-size:10px;font-weight:750;color:#41665e}
+.field select{margin-top:4px}
+.checks{display:grid;gap:6px;font-size:11px}
+.checks label{display:flex;gap:7px;align-items:center}
+.range-row{display:grid;grid-template-columns:1fr 42px;gap:7px;align-items:center}
+.range-value{font-size:10px;text-align:right;color:var(--muted)}
+.legend{display:grid;gap:5px;margin-top:8px;font-size:9.5px;color:#526a65}
+.legend span{display:flex;align-items:center;gap:6px}
+.sw{display:inline-block;width:12px;height:12px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #8da49d}
+.sw.canonical{background:#087460}.sw.community{background:#dc8b20}
+.toolbar{display:flex;gap:6px;flex-wrap:wrap}
+.btn{border:1px solid #c3d5cf;border-radius:7px;background:#fff;color:#14574b;padding:7px 9px;font-weight:750;font-size:10.5px}
+.btn.primary{background:#006a54;color:white;border-color:#006a54}
+.btn.orange{background:#fff4e4;color:#92530c;border-color:#e5bd84}
+.btn.danger{background:#fff0ef;color:#963a35;border-color:#e5b4b0}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.metric{border:1px solid var(--line);border-radius:8px;padding:7px;background:#fafdfb}
+.metric strong{display:block;font-size:17px}.metric span{font-size:9px;color:var(--muted)}
+
+.source-details,.manual-details{border:1px solid #d8e4e0;border-radius:9px;background:#fbfdfc;margin-top:8px;overflow:hidden}
+.source-details summary,.manual-details summary{list-style:none;cursor:pointer;padding:9px 10px;font-size:10.5px;font-weight:800;color:#285e53;display:flex;align-items:center;gap:7px}
+.source-details summary::-webkit-details-marker,.manual-details summary::-webkit-details-marker{display:none}
+.source-details summary::before,.manual-details summary::before{content:"＋";display:inline-grid;place-items:center;width:17px;height:17px;border:1px solid #b9cec8;border-radius:5px;background:#fff;color:#176455;font-weight:900;flex:none}
+.source-details[open] summary::before,.manual-details[open] summary::before{content:"−"}
+.source-body,.manual-body{border-top:1px solid #e2ebe8;padding:9px 10px;font-size:10px;line-height:1.65;color:#435d57;background:#fff}
+.source-body dl{display:grid;grid-template-columns:auto 1fr;gap:3px 8px;margin:6px 0}
+.source-body dt{font-weight:800;color:#536b65}.source-body dd{margin:0}
+.term-note{background:#f3f8f6;border-radius:7px;padding:7px 8px;margin-top:7px}
+.facility-card{border:1px solid var(--line);background:#fff;border-radius:8px;margin:6px 0;overflow:hidden}
+.facility-card.active{border:2px solid var(--accent);background:#eef8f5}
+.facility-card>summary{list-style:none;cursor:pointer;padding:8px 9px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}
+.facility-card>summary::-webkit-details-marker{display:none}
+.facility-card>summary::after{content:"＋";display:grid;place-items:center;width:22px;height:22px;border:1px solid #bfd0cb;border-radius:6px;background:#fff;color:#176455;font-size:15px;font-weight:900}
+.facility-card[open]>summary::after{content:"−"}
+.facility-summary-name{min-width:0}
+.facility-summary-name b{display:block;font-size:11px;line-height:1.4}
+.facility-summary-name small{display:block;color:var(--muted);font-size:9px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.facility-detail{border-top:1px solid #e1e9e6;padding:8px 9px 9px;background:#fbfdfc}
+.facility-grid{display:grid;grid-template-columns:auto 1fr;gap:3px 8px;font-size:9.5px;line-height:1.5}
+.facility-grid dt{font-weight:800;color:#58706a}.facility-grid dd{margin:0;min-width:0;word-break:break-word}
+.facility-source{margin-top:7px;padding-top:7px;border-top:1px dashed #d6e1de;font-size:9.5px;line-height:1.55;color:#536b65}
+.facility-source b{color:#315e54}
+.facility-actions{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+.facility-actions button{border:1px solid #c3d5cf;border-radius:6px;background:#fff;color:#14574b;padding:6px 8px;font-size:9.5px;font-weight:750}
+.facility-actions button.primary{background:#006a54;color:#fff;border-color:#006a54}
+.manual-index{margin:6px 0 0;padding-left:18px;font-size:10px;line-height:1.7}
+.manual-step{margin:7px 0;padding:7px 8px;background:#f6faf8;border-radius:7px;font-size:10px;line-height:1.6}
+.manual-step strong{color:#205e52}
+
+.list{margin-top:8px}
+.facility{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 9px;margin:6px 0;color:var(--ink)}
+.facility.active{border:2px solid var(--accent);padding:7px 8px;background:#eef8f5}
+.facility b{display:block;font-size:11px}
+.facility small{display:block;color:var(--muted);font-size:9px;margin-top:2px}
+.pills{margin-top:4px;display:flex;gap:4px;flex-wrap:wrap}
+.pill{display:inline-block;border-radius:50px;padding:2px 6px;font-size:9px;font-weight:750;background:#edf3f1;color:#41665e}
+.pill.comment{background:#fff3df;color:#8d570d}
+.map-col{display:flex;flex-direction:column;min-width:0;min-height:0}
+.map-toolbar{flex:none;background:#fff;border-bottom:1px solid var(--line);padding:7px 10px;display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:10.5px}
+.map-toolbar strong{font-size:12px}
+#map{position:absolute;inset:0;width:100%;height:100%;background:#e5ece8}
+.map-foot{flex:none;padding:6px 10px;background:#fff;border-top:1px solid var(--line);font-size:9.5px;line-height:1.5;color:#506963}
+.add-banner{position:absolute;z-index:1050;top:12px;left:50%;transform:translateX(-50%);background:#fff6e8;border:1px solid #dcaa65;border-radius:9px;padding:8px 12px;box-shadow:0 2px 12px #0002;font-size:11px;font-weight:750}
+.map-wrap{position:relative;flex:1;min-height:0;overflow:hidden}
+.leaflet-container{font-family:inherit}
+.leaflet-tooltip.point-tooltip{
+  background:#fff;
+  color:#173e39;
+  border:1px solid #c9d7d3;
+  border-radius:8px;
+  padding:6px 9px;
+  box-shadow:0 2px 8px rgba(0,0,0,.18);
+  font-size:11px;
+  font-weight:750;
+  line-height:1.3;
+  white-space:nowrap;
+  writing-mode:horizontal-tb;
+  text-orientation:mixed;
+  max-width:280px;
+}
+.leaflet-tooltip.point-tooltip::before{display:none!important}
+.rollout-point-icon{background:transparent!important;border:0!important}
+.point-hit{width:32px;height:32px;display:grid;place-items:center;cursor:pointer;border-radius:50%}
+.point-dot{display:block;width:12px;height:12px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #6f8e85,0 1px 4px #0005}
+.point-dot.canonical{background:#087460}
+.point-dot.community{background:#dc8b20}
+.point-hit:hover .point-dot,.point-hit:focus-visible .point-dot{transform:scale(1.18)}
+.popup-title{font-size:13px;font-weight:800;color:#173e39;margin-right:12px}
+.popup-kicker{font-size:9px;font-weight:800;color:#087460;letter-spacing:.04em;margin-bottom:4px}
+.popup-grid{display:grid;grid-template-columns:auto 1fr;gap:3px 8px;margin-top:7px;font-size:9.5px;line-height:1.45}
+.popup-grid dt{font-weight:800;color:#506963}.popup-grid dd{margin:0;color:#243f39}
+.popup-actions a.primary{background:#006a54;color:#fff;border-color:#006a54}
+.popup-actions a.mapbtn{background:#eef5ff;color:#245886;border-color:#bfd0e6}
+.popup-actions a.svbtn{background:#f3f1ff;color:#57418a;border-color:#cfc7e8}
+.popup-actions a.dirbtn{background:#eef8f5;color:#0a6655;border-color:#bddfd5}
+
+.popup-sub{font-size:10px;color:#60736e;margin:3px 0 6px;line-height:1.5}
+.popup-note{font-size:9.5px;line-height:1.5;background:#f3f7f6;border-radius:6px;padding:6px;margin-top:6px}
+.popup-actions{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+.popup-actions a,.popup-actions button{border:1px solid #c5d4d0;border-radius:6px;background:white;color:#14574b;padding:5px 6px;font-size:9.5px;font-weight:750;text-decoration:none}
+.popup-actions .orange{background:#fff4e4;color:#92530c;border-color:#e3c08f}
+.comments{margin-top:7px;border-top:1px solid #e0e7e5;padding-top:5px}
+.comment{font-size:9.5px;line-height:1.45;margin:5px 0;color:#415a54}
+.comment time{display:block;color:#81918d;font-size:8.5px}
+.modal{position:fixed;z-index:5000;inset:0;background:#102b276f;display:grid;place-items:center;padding:16px}
+.modal-panel{width:min(520px,100%);max-height:90vh;overflow:auto;background:white;border-radius:12px;padding:15px 16px;box-shadow:0 10px 35px #0005}
+.modal-panel h2{font-size:16px}
+.modal-close{float:right;border:0;background:transparent;font-size:22px;color:#667}
+.form-row{margin-top:9px}
+.form-row label{display:block;font-size:10.5px;font-weight:750;margin-bottom:4px}
+.form-help{font-size:9.5px;color:var(--muted);line-height:1.5}
+.statusline{margin-top:7px;font-size:10px;line-height:1.5;color:#506963}
+.traffic-label{font-weight:800}
+@media(max-width:850px){
+  body{height:auto;min-height:100dvh;overflow:auto}
+  header{align-items:flex-start;padding:10px 12px}
+  header h1{font-size:16px}
+  .layout{display:flex;flex-direction:column}
+  .map-col{order:0;height:58vh;min-height:330px}
+  .sidebar{order:1;overflow:visible;border-right:0;border-top:1px solid var(--line)}
+  .scroll{height:auto;overflow:visible}
+}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="version">円陣2026｜チームロールアウト版 · v1.1.1</div>
+    <h1>車いすユーザーの駐車環境 調査MAP</h1>
+    <p>107地点の手作業確認を原本に、人の気づき・追加地点・コメントを重ねる版です。</p>
+  </div>
+  <button class="help-btn" id="helpBtn" type="button">？ この版について</button>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="scroll">
+      <section class="section">
+        <div class="rollout-box">
+          <b>ひとりで作る段階から、みんなで確かめる段階へ。</b><br>
+          原本107地点は固定しています。追加地点とコメントは別データとして保存されるため、チームが試しても原本を上書きしません。
+        </div>
+        <div class="caution">
+          <b>107地点の意味：</b>Googleマップ上で車椅子用駐車区画を判別できた場合はその位置を優先し、判別できない場合は施設位置を代替登録しています。先行確認した一部地点も含みます。現地での測量・利用可否確認を保証する座標ではありません。
+        </div>
+        <details class="source-details">
+          <summary>107地点の原典・作成方法を確認</summary>
+          <div class="source-body">
+            <b>原典</b>は、107施設を選ぶ基礎になった一覧情報です。本MAPでは、広島県「思いやり駐車場利用証交付制度」の協力施設一覧を基礎台帳として使用しています。
+            <dl>
+              <dt>原典から保持</dt><dd>施設名、住所、地域、施設種別、車いす等区画数、プラスワン区画数</dd>
+              <dt>対象</dt><dd>107施設</dd>
+              <dt>車いす等</dt><dd>合計248区画（原典記載値の合計）</dd>
+              <dt>プラスワン</dt><dd>合計59区画（原典記載値の合計）</dd>
+              <dt>位置情報</dt><dd>原典の位置をそのまま採用せず、Googleマップを見ながら107地点を手作業で再確認</dd>
+            </dl>
+            <div class="term-note">
+              <b>原典</b>＝施設情報の出発点となった一覧。<br>
+              <b>原本</b>＝今回の位置確認を終え、このロールアウト版で固定している107登録地点。<br>
+              原典と原本は同じ意味ではありません。
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <section class="section">
+        <h2>施設・登録地点を探す</h2>
+        <input class="search" id="search" type="search" placeholder="施設名・住所で検索">
+        <div class="two">
+          <label class="field">地域<select id="area"><option value="">全地域</option></select></label>
+          <label class="field">施設種別<select id="category"><option value="">全種別</option></select></label>
+        </div>
+        <div class="two">
+          <label class="field">車いす等区画<select id="wheel">
+            <option value="">指定なし</option><option value="1">1区画以上</option><option value="2">2区画以上</option>
+            <option value="3">3区画以上</option><option value="5">5区画以上</option>
+          </select></label>
+          <label class="field">プラスワン<select id="plus">
+            <option value="">指定なし</option><option value="yes">登録あり</option><option value="no">記載なし</option>
+          </select></label>
+        </div>
+        <div class="statusline" id="count"></div>
+      </section>
+
+      <section class="section">
+        <h2>地図に表示するもの</h2>
+        <div class="checks">
+          <label><input type="checkbox" id="canonicalOn" checked> 107登録地点</label>
+          <label><input type="checkbox" id="communityOn" checked> チーム追加地点</label>
+</div>
+        <label class="field" style="margin-top:8px">背景地図の濃さ</label>
+        <div class="range-row"><input id="mapOpacity" type="range" min="25" max="100" step="5" value="82"><span class="range-value" id="mapValue">82%</span></div>
+<div class="legend">
+          <span><i class="sw canonical"></i> 107登録地点</span>
+          <span><i class="sw community"></i> チームが後から追加した地点</span>
+</div>
+      </section>
+
+      <section class="section">
+        <h2>気づきを追加する</h2>
+        <div class="toolbar">
+          <button class="btn orange" id="addPointBtn" type="button">＋ 地点を追加</button>
+          <button class="btn" id="exportBtn" type="button">共有JSONを書き出す</button>
+          <button class="btn" id="importBtn" type="button">JSONを読み込む</button>
+          <button class="btn danger" id="clearBtn" type="button">この端末の追加データを初期化</button>
+        </div>
+        <div class="statusline">
+          <b>まずは基本機能を使ってみてください。</b><br>
+          JSON機能は、将来的に各メンバーが追加情報を持ち寄り、統合・確認して更新版MAPへ反映するための機能です。現段階では操作を覚える必要はありません。
+        </div>
+        <input id="importFile" type="file" accept=".json,application/json" hidden>
+        <div class="stats">
+          <div class="metric"><strong id="addedCount">0</strong><span>追加地点</span></div>
+          <div class="metric"><strong id="commentCount">0</strong><span>コメント</span></div>
+          <div class="metric"><strong>107</strong><span>原本地点</span></div>
+        </div>
+        <div class="statusline" id="shareStatus">追加地点・コメントはこの端末内に保存されます。まずは基本操作を使ってみてください。</div>
+      </section>
+
+      <div class="list" id="list"></div>
+    </div>
+  </aside>
+
+  <main class="map-col">
+    <div class="map-toolbar">
+      <div><strong>登録地点を見る → 現地で確かめる → 気づきを残す</strong><br><span>追加情報は原本107地点とは別管理です。</span></div>
+      <button class="btn" id="fitBtn" type="button">表示中を収める</button>
+    </div>
+    <div class="map-wrap">
+      <div id="map"></div>
+      <div id="addBanner" class="add-banner" hidden>追加したい場所を地図上でクリックしてください。ESCで解除できます。</div>
+    </div>
+    <div class="map-foot"><b>原本保護：</b>107地点はこの版から編集しません。チームの追加地点・コメントはJSONとして別に蓄積し、レビュー後に次版へ反映できます。</div>
+  </main>
+</div>
+
+<div class="modal" id="helpModal" hidden>
+  <div class="modal-panel">
+    <button class="modal-close" id="helpClose" type="button">×</button>
+    <h2>取扱説明書 v2｜はじめて使う方へ</h2>
+    <p style="font-size:11px;line-height:1.7">
+      このMAPは、東広島市内の車いすユーザーの駐車環境を「見る・確かめる・気づきを残す」ための調査MAPです。
+      完成済みの駐車場案内ではなく、107登録地点を出発点に、チームの目と手で情報を育てるために使います。
+      最初は難しい操作を覚える必要はありません。まずは地図上の点を見て、気になる場所を開いてみてください。
+    </p>
+
+    <div class="manual-step"><strong>まず30秒で試す</strong><br>
+      ① 地図上の緑の点にマウスを重ねて施設名を見る。<br>
+      ② 緑の点をクリックして詳細ポップアップを開く。<br>
+      ③ Googleマップまたはストリートビューを開いて周辺を見る。
+    </div>
+
+    <details class="manual-details" open>
+      <summary>1｜登録地点を見る</summary>
+      <div class="manual-body">
+        緑の点が原本107登録地点です。マウスを重ねると施設名が白い角丸ラベルで表示されます。
+        点をクリックすると、施設名・住所・地域・施設種別・車いす等区画・プラスワン・登録座標を確認できます。
+        ポップアップ内から「Googleマップ」「ストリートビュー」「この地点へ行く」を開けます。
+      </div>
+    </details>
+
+    <details class="manual-details">
+      <summary>2｜左サイドバーを使う</summary>
+      <div class="manual-body">
+        施設名・住所検索、地域、施設種別、車いす等区画、プラスワンで絞り込めます。
+        各施設は「＋」を押すと詳細が展開され、「−」で収納されます。
+        展開すると住所、区画数、原典記載名・住所などを確認できます。「地図で見る」を押すと、その地点へ移動して同じポップアップを開きます。
+      </div>
+    </details>
+
+    <details class="manual-details">
+      <summary>3｜原典と原本を確認する</summary>
+      <div class="manual-body">
+        <b>原典</b>は107施設を選ぶ基礎になった一覧情報です。本MAPでは、広島県「思いやり駐車場利用証交付制度」の協力施設一覧を基礎台帳として使用しています。
+        原典から、施設名・住所・地域・施設種別・車いす等区画数・プラスワン区画数を保持しています。<br><br>
+        <b>原本</b>は、Googleマップを見ながら手作業で位置確認を終え、このロールアウト版で固定した107登録地点です。
+        車椅子用駐車区画を判別できた場合はその位置を優先し、判別できない場合は施設位置を代替登録しています。
+        現地測量や利用可否の確認済みを意味しません。
+      </div>
+    </details>
+
+    <details class="manual-details">
+      <summary>4｜気づき・新しい地点を追加する</summary>
+      <div class="manual-body">
+        107施設以外にも、民間施設などで車椅子用駐車位置を見つけた場合は「＋地点を追加」から登録できます。
+        また、既存107地点・チーム追加地点のどちらにもコメントを付けられます。
+        「入口横に区画が見える」「現地で幅を確認したい」など、次の人が確認しやすい観察を残してください。
+        チーム追加地点は未検証情報として原本とは別管理されます。
+      </div>
+    </details>
+
+    <details class="manual-details">
+      <summary>5｜チーム共有機能について</summary>
+      <div class="manual-body">
+        このMAPには、追加した地点やコメントをJSONファイルとして保存・読み込みする機能があります。
+        将来的には、各メンバーが現地や地図上で見つけた情報を持ち寄り、チームで統合・確認したうえで、更新版MAPへ反映していく運用を想定しています。<br><br>
+        <b>ただし、現段階ではJSON操作を覚える必要はありません。</b><br>
+        まずは「地図を見る → 登録地点を確認する → Googleマップやストリートビューを見る → 気づきをコメントする」といった基本機能を使ってみてください。
+        JSONの書き出し・統合方法は、チームでの運用方法が固まった段階で改めて共有します。
+      </div>
+    </details>
+
+    <details class="manual-details">
+      <summary>6｜安全な使い方</summary>
+      <div class="manual-body">
+        このMAPの登録地点は現地確認済み・利用保証済みとは限りません。
+        Street Viewも最寄りの撮影地点を表示する場合があります。
+        実際の利用前には、必要に応じて現地や施設情報を確認してください。
+        コメントには氏名、病歴、連絡先などの個人情報を書かず、場所・設備・利用状況の観察に限定してください。
+      </div>
+    </details>
+
+    <div class="caution" style="margin-top:10px">
+      <b>基本の流れ：</b>地図を見る → 気になる → Googleマップ等で見る → 現地で確かめる → 気づきを残す。
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="addModal" hidden>
+  <div class="modal-panel">
+    <button class="modal-close" id="addClose" type="button">×</button>
+    <h2>地点を追加</h2>
+    <div class="form-help" id="linkInfo">原本とは別の「チーム追加地点」として保存します。</div>
+    <div class="form-row"><label>名称</label><input class="text-input" id="addName" type="text" maxlength="120" placeholder="例：○○レストラン 車椅子用区画"></div>
+    <div class="form-row"><label>種類</label>
+      <select class="text-input" id="addType">
+        <option value="wheelchair_parking">車椅子用駐車位置</option>
+        <option value="observation">気になる地点</option>
+        <option value="other">その他</option>
+      </select>
+    </div>
+    <div class="form-row"><label>緯度, 経度</label><input class="coord-input" id="addCoords" type="text" placeholder="34.xxxxxx, 132.xxxxxx"></div>
+    <div class="form-row"><label>コメント（任意）</label><textarea class="text-area" id="addComment" maxlength="1000" placeholder="例：入口横に車椅子マーク付き区画を確認。現地で幅を確認したい。"></textarea></div>
+    <div class="toolbar" style="margin-top:12px">
+      <button class="btn primary" id="saveAdd" type="button">この地点を保存</button>
+      <button class="btn" id="cancelAdd" type="button">キャンセル</button>
+    </div>
+  </div>
+</div>
+
+<script id="canonical-data" type="application/json">{"schema":"higashihiroshima-accessible-parking-rollout/canonical-1.0","app_version":"1.1.0","canonical_id":"facility107-r107","source_file":"Facility107_Manual_v0.4.0_r107_107of107.html","point_count":107,"wheel_spaces_total":248,"plus_one_spaces_total":59,"point_method":"利用者がGoogleマップ上で車椅子用駐車区画を確認できた場合はその位置を登録し、判別できない場合は施設位置を代替登録した。既存の一部13地点は先行確認データを継承している。いずれも現地測量・現地確認済み座標を意味しない。","points":[{"id":"hiroshima-2026-7","name":"広島県東広島庁舎","address":"広島県東広島市西条昭和町13-10","raw_name":"広島県東広島庁舎","raw_address":"広島県東広島市西条昭和町13-10","area":"西条","category":"役所・出張所","wheel_spaces":2,"plus_one_spaces":null,"lat":34.42579930200581,"lon":132.74366204858381,"confirmed_at":"2026-11-01T11:19:07","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-8","name":"東広島市役所本庁舎","address":"広島県東広島市西条栄町8-29","raw_name":"東広島市役所本庁舎","raw_address":"広島県東広島市西条栄町8-29","area":"西条","category":"役所・出張所","wheel_spaces":2,"plus_one_spaces":null,"lat":34.426490498749175,"lon":132.74317450904223,"confirmed_at":"2026-10-13T23:19:47","review_origin":"seed_13"},{"id":"hiroshima-2026-9","name":"東広島市役所社会福祉課","address":"広島県東広島市西条栄町8-29","raw_name":"東広島市役所社会福祉課","raw_address":"広島県東広島市西条栄町8-29","area":"西条","category":"役所・出張所","wheel_spaces":2,"plus_one_spaces":2,"lat":34.426998195610715,"lon":132.74348119622334,"confirmed_at":"2026-11-01T11:20:03","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-10","name":"東広島市役所黒瀬支所本庁舎","address":"広島県東広島市黒瀬町丸山1333","raw_name":"東広島市役所黒瀬支所本庁舎","raw_address":"広島県東広島市黒瀬町丸山1333","area":"黒瀬","category":"役所・出張所","wheel_spaces":2,"plus_one_spaces":null,"lat":34.32456990860389,"lon":132.6771937761419,"confirmed_at":"2026-11-01T10:38:41","review_origin":"seed_13"},{"id":"hiroshima-2026-11","name":"東広島市役所黒瀬支所南庁舎","address":"広島県東広島市黒瀬町丸山1333","raw_name":"東広島市役所黒瀬支所南庁舎","raw_address":"広島県東広島市黒瀬町丸山1333","area":"黒瀬","category":"役所・出張所","wheel_spaces":2,"plus_one_spaces":null,"lat":34.32460106052634,"lon":132.67717907197274,"confirmed_at":"2026-11-01T10:40:03","review_origin":"seed_13"},{"id":"hiroshima-2026-12","name":"東広島市役所福富支所","address":"広島県東広島市福富町久芳1545-1","raw_name":"東広島市役所福富支所","raw_address":"広島県東広島市福富町久芳1545-1","area":"福富","category":"役所・出張所","wheel_spaces":4,"plus_one_spaces":null,"lat":34.536491462468305,"lon":132.77788137595564,"confirmed_at":"2026-11-01T11:20:41","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-13","name":"東広島市役所豊栄支所","address":"広島県東広島市豊栄町鍛冶屋963-2","raw_name":"東広島市役所豊栄支所","raw_address":"広島県東広島市豊栄町鍛冶屋963-2","area":"豊栄","category":"役所・出張所","wheel_spaces":2,"plus_one_spaces":null,"lat":34.56348597929951,"lon":132.82523309268456,"confirmed_at":"2026-11-01T11:21:33","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-14","name":"東広島市役所河内支所","address":"広島県東広島市河内町中河内1166","raw_name":"東広島市役所河内支所","raw_address":"広島県東広島市河内町中河内1166","area":"河内","category":"役所・出張所","wheel_spaces":2,"plus_one_spaces":null,"lat":34.4722374661848,"lon":132.88843243666102,"confirmed_at":"2026-11-01T10:42:01","review_origin":"seed_13"},{"id":"hiroshima-2026-15","name":"東広島市役所安芸津支所","address":"広島県東広島市安芸津町三津4398","raw_name":"東広島市役所安芸津支所","raw_address":"広島県東広島市安芸津町三津4398","area":"安芸津","category":"役所・出張所","wheel_spaces":2,"plus_one_spaces":null,"lat":34.31934395184554,"lon":132.81394324050774,"confirmed_at":"2026-11-01T11:23:49","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-16","name":"東広島市役所八本松出張所","address":"広島県東広島市八本松町原10128-200","raw_name":"東広島市役所八本松出張所","raw_address":"広島県東広島市八本松町原10128-200","area":"八本松","category":"役所・出張所","wheel_spaces":1,"plus_one_spaces":null,"lat":34.44088502898758,"lon":132.69239694821317,"confirmed_at":"2026-11-01T11:24:11","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-17","name":"東広島市役所志和出張所","address":"広島県東広島市志和町志和堀4123-6","raw_name":"東広島市役所志和出張所","raw_address":"広島県東広島市志和町志和堀4123-6","area":"志和","category":"役所・出張所","wheel_spaces":1,"plus_one_spaces":null,"lat":34.499151314451765,"lon":132.66015756685252,"confirmed_at":"2026-11-01T11:24:34","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-18","name":"東広島市役所高屋出張所","address":"広島県東広島市高屋町杵原1334-2","raw_name":"東広島市役所高屋出張所","raw_address":"広島県東広島市高屋町杵原1334-2","area":"高屋","category":"役所・出張所","wheel_spaces":1,"plus_one_spaces":null,"lat":34.44790525211171,"lon":132.7876633421327,"confirmed_at":"2026-11-01T11:25:05","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-25","name":"東広島警察署","address":"広島県東広島市西条昭和町4-11","raw_name":"東広島警察署","raw_address":"広島県東広島市西条昭和町4-11","area":"西条","category":"警察・消防","wheel_spaces":2,"plus_one_spaces":1,"lat":34.42404068447228,"lon":132.74118614766766,"confirmed_at":"2026-11-01T11:26:06","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-32","name":"県立安芸津病院","address":"広島県東広島市安芸津町三津4388","raw_name":"県立安芸津病院","raw_address":"広島県東広島市安芸津町三津4388","area":"安芸津","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.32014648689961,"lon":132.8157143768191,"confirmed_at":"2026-11-01T11:26:34","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-33","name":"東広島医療センター","address":"広島県東広島市西条町寺家513","raw_name":"東広島医療センター","raw_address":"広島県東広島市西条町寺家513","area":"西条","category":"福祉・医療施設","wheel_spaces":13,"plus_one_spaces":null,"lat":34.44837904691745,"lon":132.72338259880766,"confirmed_at":"2026-10-13T23:21:16","review_origin":"seed_13"},{"id":"hiroshima-2026-34","name":"浅倉歯科医院","address":"広島県東広島市高屋町造賀3595-2","raw_name":"浅倉歯科医院","raw_address":"広島県東広島市高屋町造賀3595-2","area":"高屋","category":"福祉・医療施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.4829601358768,"lon":132.76068253050002,"confirmed_at":"2026-11-01T11:26:59","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-35","name":"総合福祉センター","address":"広島県東広島市西条町土与丸1108","raw_name":"総合福祉センター","raw_address":"広島県東広島市西条町土与丸1108","area":"西条","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":1,"lat":34.42474168280747,"lon":132.75274507953606,"confirmed_at":"2026-11-01T11:27:30","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-36","name":"黒瀬保健福祉センター","address":"広島県東広島市黒瀬町丸山1286-1","raw_name":"黒瀬保健福祉センター","raw_address":"広島県東広島市黒瀬町丸山1286-1","area":"黒瀬","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":1,"lat":34.324691094716336,"lon":132.67679823406607,"confirmed_at":"2026-11-01T11:29:39","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-37","name":"豊栄保健福祉センター","address":"広島県東広島市豊栄町乃美2841-1","raw_name":"豊栄保健福祉センター","raw_address":"広島県東広島市豊栄町乃美2841-1","area":"豊栄","category":"福祉・医療施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.563818706823795,"lon":132.8216595839596,"confirmed_at":"2026-11-01T11:29:59","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-38","name":"河内保健福祉センター","address":"広島県東広島市河内町中河内1206-1","raw_name":"河内保健福祉センター","raw_address":"広島県東広島市河内町中河内1206-1","area":"河内","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.471939612132175,"lon":132.88939002775916,"confirmed_at":"2026-11-01T11:30:28","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-39","name":"河内社会福祉会館","address":"広島県東広島市河内町中河内1232-4","raw_name":"河内社会福祉会館","raw_address":"広島県東広島市河内町中河内1232-4","area":"河内","category":"福祉・医療施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.470963687289505,"lon":132.89002326292487,"confirmed_at":"2026-11-01T11:30:52","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-40","name":"安芸津文化福祉センター","address":"広島県東広島市安芸津町三津4398","raw_name":"安芸津文化福祉センター","raw_address":"広島県東広島市安芸津町三津4398","area":"安芸津","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":2,"lat":34.319902934368415,"lon":132.81350922869493,"confirmed_at":"2026-11-01T11:31:26","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-41","name":"特別養護老人ホーム御薗寮","address":"広島県東広島市高屋町高屋堀3486","raw_name":"特別養護老人ホーム御薗寮","raw_address":"広島県東広島市高屋町高屋堀3486","area":"高屋","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.459441029582415,"lon":132.81053362475683,"confirmed_at":"2026-11-01T11:31:52","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-42","name":"障害福祉サービス事業所ウィング","address":"広島県東広島市八本松町米満461","raw_name":"障害福祉サービス事業所ウィング","raw_address":"広島県東広島市八本松町米満461","area":"八本松","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":5,"lat":34.4500515022425,"lon":132.72347602406438,"confirmed_at":"2026-11-01T11:32:22","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-43","name":"あきつ世代間交流センター","address":"広島県東広島市安芸津町三津5556-1","raw_name":"あきつ世代間交流センター","raw_address":"広島県東広島市安芸津町三津5556-1","area":"安芸津","category":"福祉・医療施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.319394932282485,"lon":132.81324341291636,"confirmed_at":"2026-11-01T11:32:46","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-44","name":"東広島保健医療センター","address":"広島県東広島市西条町土与丸1113","raw_name":"東広島保健医療センター","raw_address":"広島県東広島市西条町土与丸1113","area":"西条","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":1,"lat":34.4245419277456,"lon":132.75309645219127,"confirmed_at":"2026-11-01T11:33:23","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-45","name":"黒瀬児童館","address":"広島県東広島市黒瀬町丸山1450-1","raw_name":"黒瀬児童館","raw_address":"広島県東広島市黒瀬町丸山1450-1","area":"黒瀬","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.32449048263833,"lon":132.67227067319158,"confirmed_at":"2026-11-01T11:33:54","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-46","name":"勤労福祉センター","address":"広島県東広島市西条吉行東１丁目1-16","raw_name":"勤労福祉センター","raw_address":"広島県東広島市西条吉行東１丁目1-16","area":"西条","category":"福祉・医療施設","wheel_spaces":4,"plus_one_spaces":null,"lat":34.43265010015062,"lon":132.75802587386212,"confirmed_at":"2026-11-01T11:34:24","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-47","name":"のぞみ整形外科クリニック西条","address":"広島県東広島市西条町助実1182-1","raw_name":"のぞみ整形外科クリニック","raw_address":"広島県東広島市西条町助実1182-1","area":"西条","category":"福祉・医療施設","wheel_spaces":7,"plus_one_spaces":null,"lat":34.42501303162018,"lon":132.75558034344988,"confirmed_at":"2026-11-01T10:34:31","review_origin":"seed_13"},{"id":"hiroshima-2026-48","name":"ゆかわ脳神経外科クリニック","address":"広島県東広島市西条土与丸5丁目9番33号","raw_name":"ゆかわ脳神経外科クリニック","raw_address":"広島県東広島市西条土与丸5丁目9番33号","area":"西条","category":"福祉・医療施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.42852963957907,"lon":132.75275990967663,"confirmed_at":"2026-11-01T11:34:44","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-49","name":"のぞみ整形外科クリニック寺屋","address":"広島県東広島市西条町寺屋4720","raw_name":"のぞみ整形外科クリニック寺屋","raw_address":"広島県東広島市西条町寺屋4720","area":"西条","category":"福祉・医療施設","wheel_spaces":2,"plus_one_spaces":2,"lat":34.43693201113164,"lon":132.72284167445557,"confirmed_at":"2026-11-01T11:35:17","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-56","name":"教育センター　本館","address":"広島県東広島市八本松南1-2-1","raw_name":"教育センター　本館","raw_address":"広島県東広島市八本松南1-2-1","area":"八本松","category":"教育施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.44152338413575,"lon":132.6952011373719,"confirmed_at":"2026-11-01T11:35:41","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-57","name":"教育センター　特別支援教育棟","address":"広島県東広島市八本松南1-2-2","raw_name":"教育センター　特別支援教育棟","raw_address":"広島県東広島市八本松南1-2-2","area":"八本松","category":"教育施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.441532042219904,"lon":132.69519911300992,"confirmed_at":"2026-11-01T11:42:05","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-58","name":"東広島市天文台広場","address":"広島県東広島市西条町下三永695-1","raw_name":"東広島市天文台広場","raw_address":"広島県東広島市西条町下三永695-1","area":"西条","category":"教育施設","wheel_spaces":null,"plus_one_spaces":1,"lat":34.377350883614305,"lon":132.77676869971165,"confirmed_at":"2026-11-01T11:42:31","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-65","name":"憩いの森公園","address":"広島県東広島市西条町寺家941-17","raw_name":"憩いの森公園","raw_address":"広島県東広島市西条町寺家941-17","area":"西条","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":4,"plus_one_spaces":4,"lat":34.446789710680996,"lon":132.73822095022513,"confirmed_at":"2026-11-01T11:43:08","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-66","name":"道の駅　湖畔の里福富","address":"広島県東広島市福富町久芳1506","raw_name":"道の駅　湖畔の里福富","raw_address":"広島県東広島市福富町久芳1506","area":"福富","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":3,"plus_one_spaces":null,"lat":34.532966214787095,"lon":132.77515137064174,"confirmed_at":"2026-10-13T23:23:26","review_origin":"seed_13"},{"id":"hiroshima-2026-67","name":"東広島運動公園","address":"広島県東広島市西条町田口67-1","raw_name":"東広島運動公園","raw_address":"広島県東広島市西条町田口67-1","area":"西条","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":6,"plus_one_spaces":null,"lat":34.3805534620736,"lon":132.7314200961631,"confirmed_at":"2026-11-01T11:43:31","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-68","name":"黒瀬屋内プール","address":"広島県東広島市黒瀬町楢原18-4","raw_name":"黒瀬屋内プール","raw_address":"広島県東広島市黒瀬町楢原18-4","area":"黒瀬","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.332600207485015,"lon":132.67108077850583,"confirmed_at":"2026-10-13T23:26:28","review_origin":"seed_13"},{"id":"hiroshima-2026-69","name":"黒瀬市民グラウンド","address":"広島県東広島市黒瀬町津江575-2","raw_name":"黒瀬市民グラウンド","raw_address":"広島県東広島市黒瀬町津江575-2","area":"黒瀬","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":2,"plus_one_spaces":1,"lat":34.34631494721522,"lon":132.6178793595522,"confirmed_at":"2026-11-01T11:44:05","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-70","name":"黒瀬B&G海洋センター","address":"東広島市黒瀬町楢原10018番地4","raw_name":"黒瀬Ｂ＆Ｇ海洋センター","raw_address":"広島県東広島市黒瀬町楢原18-4","area":"黒瀬","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.3337576291371,"lon":132.66997717754543,"confirmed_at":"2026-11-01T11:44:37","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-71","name":"安芸津Ｂ＆Ｇ海洋センター","address":"広島県東広島市安芸津町風早3092-1","raw_name":"安芸津Ｂ＆Ｇ海洋センター","raw_address":"広島県東広島市安芸津町風早3092-1","area":"安芸津","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.31698475788121,"lon":132.80903690964473,"confirmed_at":"2026-11-01T11:45:00","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-72","name":"福富パークゴルフ場","address":"広島県東広島市福富町久芳4286-1","raw_name":"福富パークゴルフ場","raw_address":"広島県東広島市福富町久芳4286-1","area":"福富","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.53699058085348,"lon":132.77486596737668,"confirmed_at":"2026-11-01T11:45:37","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-73","name":"道の駅西条のん太の酒蔵","address":"広島県東広島市西条町寺家10020-43","raw_name":"道の駅西条のん太の酒蔵","raw_address":"広島県東広島市西条町寺家10020-43","area":"西条","category":"スポーツ・公園・レクリエーション施設","wheel_spaces":3,"plus_one_spaces":null,"lat":34.43359503237307,"lon":132.70292077630435,"confirmed_at":"2026-11-01T11:46:10","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-80","name":"東広島市黒瀬文化会館","address":"広島県東広島市黒瀬町乃美尾890-1","raw_name":"東広島市黒瀬文化会館","raw_address":"広島県東広島市黒瀬町乃美尾890-1","area":"黒瀬","category":"文化施設・図書館","wheel_spaces":1,"plus_one_spaces":null,"lat":34.34217079195044,"lon":132.69250678496005,"confirmed_at":"2026-11-01T11:47:59","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-81","name":"東広島河内人権センター","address":"広島県東広島市河内町中河内1289-1","raw_name":"東広島河内人権センター","raw_address":"広島県東広島市河内町中河内1289-1","area":"河内","category":"文化施設・図書館","wheel_spaces":1,"plus_one_spaces":null,"lat":34.4703448,"lon":132.8921933,"confirmed_at":"2026-10-13T21:27:52","review_origin":"seed_13"},{"id":"hiroshima-2026-82","name":"東広島市指定重要文化財 旧石井家住宅","address":"広島県東広島市西条町下見1086-1","raw_name":"東広島市指定重要文化財旧石井家住宅","raw_address":"広島県東広島市西条町下見1086-1","area":"西条","category":"文化施設・図書館","wheel_spaces":1,"plus_one_spaces":1,"lat":34.413676,"lon":132.720398,"confirmed_at":"2026-10-13","review_origin":"seed_13"},{"id":"hiroshima-2026-83","name":"東広島市出土文化財管理センター","address":"広島県東広島市河内町中河内651-7","raw_name":"東広島市出土文化財管理センター","raw_address":"広島県東広島市河内町中河内651-7","area":"河内","category":"文化施設・図書館","wheel_spaces":2,"plus_one_spaces":2,"lat":34.468513141515515,"lon":132.89092257373298,"confirmed_at":"2026-11-01T11:48:19","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-84","name":"中央図書館","address":"広島県東広島市西条中央7丁目25-11","raw_name":"中央図書館","raw_address":"広島県東広島市西条中央7丁目25-11","area":"西条","category":"文化施設・図書館","wheel_spaces":5,"plus_one_spaces":null,"lat":34.41582624539252,"lon":132.73569995243258,"confirmed_at":"2026-11-01T11:49:32","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-91","name":"寺西地域センター","address":"広島県東広島市西条町寺家3166-1","raw_name":"寺西地域センター","raw_address":"広島県東広島市西条町寺家3166-1","area":"西条","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":3,"plus_one_spaces":null,"lat":34.4293253528573,"lon":132.71920545260872,"confirmed_at":"2026-11-01T11:50:01","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-92","name":"郷田地域センター","address":"広島県東広島市西条町郷曽11130-5","raw_name":"郷田地域センター","raw_address":"広島県東広島市西条町郷曽11130-5","area":"西条","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":3,"plus_one_spaces":null,"lat":34.37860096698428,"lon":132.71018616716583,"confirmed_at":"2026-11-01T11:50:21","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-93","name":"板城地域センター","address":"広島県東広島市西条町馬木565-1","raw_name":"板城地域センター","raw_address":"広島県東広島市西条町馬木565-1","area":"西条","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":1,"lat":34.370736060940864,"lon":132.7325932757926,"confirmed_at":"2026-11-01T11:51:12","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-94","name":"三永地域センター","address":"広島県東広島市西条町下三永10927-2","raw_name":"三永地域センター","raw_address":"広島県東広島市西条町下三永10927-2","area":"西条","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.393535359075294,"lon":132.77790878839835,"confirmed_at":"2026-11-01T11:52:41","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-95","name":"御薗宇地域センター","address":"広島県東広島市西条町御薗宇7200","raw_name":"御薗宇地域センター","raw_address":"広島県東広島市西条町御薗宇7200","area":"西条","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.408332540644345,"lon":132.7479847237411,"confirmed_at":"2026-11-01T11:53:06","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-96","name":"東西条地域センター","address":"広島県東広島市西条土与丸2-3-4","raw_name":"東西条地域センター","raw_address":"広島県東広島市西条土与丸2-3-4","area":"西条","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.431647923319424,"lon":132.75287773744316,"confirmed_at":"2026-11-01T11:55:14","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-97","name":"川上地域センター","address":"広島県東広島市八本松飯田8-19-49","raw_name":"川上地域センター","raw_address":"広島県東広島市八本松飯田8-19-49","area":"八本松","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":2,"lat":34.4546114240438,"lon":132.69846488242044,"confirmed_at":"2026-11-01T11:56:48","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-98","name":"吉川地域センター","address":"広島県東広島市八本松町吉川435-1","raw_name":"吉川地域センター","raw_address":"広島県東広島市八本松町吉川435-1","area":"八本松","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.39352049599422,"lon":132.67206747544714,"confirmed_at":"2026-11-01T11:57:11","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-99","name":"八本松地域センター","address":"広島県東広島市八本松南2-1-1","raw_name":"八本松地域センター","raw_address":"広島県東広島市八本松南2-1-1","area":"八本松","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.43877510251756,"lon":132.69354567355586,"confirmed_at":"2026-11-01T11:57:58","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-100","name":"東志和地域センター","address":"広島県東広島市志和町志和東3887-1","raw_name":"東志和地域センター","raw_address":"広島県東広島市志和町志和東3887-1","area":"志和","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":3,"plus_one_spaces":null,"lat":34.48032648300441,"lon":132.6810517315334,"confirmed_at":"2026-11-01T11:58:20","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-101","name":"志和堀地域センター","address":"広島県東広島市志和町志和堀857","raw_name":"志和堀地域センター","raw_address":"広島県東広島市志和町志和堀857","area":"志和","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.507916481003626,"lon":132.6725004443592,"confirmed_at":"2026-11-01T11:59:02","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-102","name":"高屋西地域センター","address":"広島県東広島市高屋町杵原1276","raw_name":"高屋西地域センター","raw_address":"広島県東広島市高屋町杵原1276","area":"高屋","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.44929473108289,"lon":132.78439932431135,"confirmed_at":"2026-11-01T12:01:16","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-103","name":"小谷地域センター","address":"広島県東広島市高屋町小谷5560","raw_name":"小谷地域センター","raw_address":"広島県東広島市高屋町小谷5560","area":"高屋","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.43674515993429,"lon":132.84230693122927,"confirmed_at":"2026-11-01T12:21:16","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-104","name":"造賀地域センター","address":"広島県東広島市高屋町造賀3638-1","raw_name":"造賀地域センター","raw_address":"広島県東広島市高屋町造賀3638-1","area":"高屋","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.48650140121753,"lon":132.7614421606528,"confirmed_at":"2026-11-01T12:22:58","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-105","name":"高美が丘地域センター","address":"広島県東広島市高屋高美が丘4-34-2","raw_name":"高美が丘地域センター","raw_address":"広島県東広島市高屋高美が丘4-34-2","area":"高屋","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.46046089162416,"lon":132.79224412316012,"confirmed_at":"2026-11-01T12:24:46","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-106","name":"竹仁地域センター","address":"広島県東広島市福富町下竹仁501-11","raw_name":"竹仁地域センター","raw_address":"広島県東広島市福富町下竹仁501-11","area":"福富","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.52767292499443,"lon":132.74011401199616,"confirmed_at":"2026-11-01T12:25:42","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-107","name":"上戸野地域センター","address":"広島県東広島市福富町上戸野2555-1","raw_name":"上戸野地域センター","raw_address":"広島県東広島市福富町上戸野2555-1","area":"福富","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":3,"plus_one_spaces":1,"lat":34.51450893736099,"lon":132.78050600751487,"confirmed_at":"2026-11-01T12:26:22","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-108","name":"清武西地域センター","address":"広島県東広島市豊栄町清武3756-1","raw_name":"清武西地域センター","raw_address":"広島県東広島市豊栄町清武3756-1","area":"豊栄","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.59461277671077,"lon":132.81372680558917,"confirmed_at":"2026-11-01T12:27:06","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-109","name":"清武地域センター","address":"広島県東広島市豊栄町鍛冶屋603","raw_name":"清武地域センター","raw_address":"広島県東広島市豊栄町鍛冶屋603","area":"豊栄","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.569114596854845,"lon":132.82405457140104,"confirmed_at":"2026-11-01T12:28:53","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-110","name":"安宿地域センター","address":"広島県東広島市豊栄町安宿3876-1","raw_name":"安宿地域センター","raw_address":"広島県東広島市豊栄町安宿3876-1","area":"豊栄","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.5640781713616,"lon":132.84773517453772,"confirmed_at":"2026-11-01T12:30:00","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-111","name":"乃美地域センター","address":"広島県東広島市豊栄町乃美3163","raw_name":"乃美地域センター","raw_address":"広島県東広島市豊栄町乃美3163","area":"豊栄","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":2,"lat":34.566906809915444,"lon":132.81172832678385,"confirmed_at":"2026-11-01T12:31:17","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-112","name":"吉原地域センター","address":"広島県東広島市豊栄町吉原2243-1","raw_name":"吉原地域センター","raw_address":"広島県東広島市豊栄町吉原2243-1","area":"豊栄","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.6034480327586,"lon":132.8627965865715,"confirmed_at":"2026-11-01T12:32:21","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-113","name":"入野地域センター","address":"広島県東広島市河内町入野2650-3","raw_name":"入野地域センター","raw_address":"広島県東広島市河内町入野2650-3","area":"河内","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":1,"lat":34.441050002668256,"lon":132.8592270725989,"confirmed_at":"2026-11-01T12:32:45","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-114","name":"小田地域センター","address":"広島県東広島市河内町小田2182","raw_name":"小田地域センター","raw_address":"広島県東広島市河内町小田2182","area":"河内","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.50609490808201,"lon":132.87273956524683,"confirmed_at":"2026-11-01T12:34:08","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-115","name":"風早地域センター","address":"広島県東広島市安芸津町風早1214-1","raw_name":"風早地域センター","raw_address":"広島県東広島市安芸津町風早1214-1","area":"安芸津","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.31358560840419,"lon":132.7940922889014,"confirmed_at":"2026-11-01T12:34:57","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-116","name":"乃美尾会館","address":"広島県東広島市黒瀬町乃美尾2131-1","raw_name":"乃美尾会館","raw_address":"広島県東広島市黒瀬町乃美尾2131-1","area":"黒瀬","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.33214627490691,"lon":132.69524477654926,"confirmed_at":"2026-11-01T12:35:43","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-117","name":"西志和地域センター","address":"広島県東広島市志和町七条椛坂1737-1","raw_name":"西志和地域センター","raw_address":"広島県東広島市志和町七条椛坂1737-1","area":"志和","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":1,"lat":34.48032957842801,"lon":132.68105100696354,"confirmed_at":"2026-11-01T12:36:09","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-118","name":"東広島市黒瀬生涯学習センター","address":"広島県東広島市黒瀬町菅田10","raw_name":"東広島市黒瀬生涯学習センター","raw_address":"広島県東広島市黒瀬町菅田10","area":"黒瀬","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.323724150992604,"lon":132.67090558659885,"confirmed_at":"2026-11-01T12:37:49","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-119","name":"三ツ城地域センター（下見福祉会館）","address":"広島県東広島市西条町下見5-4-8","raw_name":"三ツ城地域センター（下見福祉会館）","raw_address":"広島県東広島市西条町下見5-4-8","area":"西条","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":3,"plus_one_spaces":null,"lat":34.41175977006557,"lon":132.71708233052448,"confirmed_at":"2026-11-01T12:38:19","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-120","name":"能良地域センター","address":"広島県東広島市豊栄町能良1574-1","raw_name":"能良地域センター","raw_address":"広島県東広島市豊栄町能良1574-1","area":"豊栄","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":2,"plus_one_spaces":null,"lat":34.53853280153335,"lon":132.8252486297416,"confirmed_at":"2026-11-01T12:38:54","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-121","name":"高屋東地域センター","address":"広島県東広島市高屋町白市550","raw_name":"高屋東地域センター","raw_address":"広島県東広島市高屋町白市550","area":"高屋","category":"公民館・市民活動・青少年・国際交流施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.45693314683726,"lon":132.81858359027217,"confirmed_at":"2026-11-01T12:40:10","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-128","name":"西部畜産事務所","address":"広島県東広島市西条御条町1-15","raw_name":"西部畜産事務所","raw_address":"広島県東広島市西条御条町1-15","area":"西条","category":"生活・経済関連施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.42551124953185,"lon":132.74518971332532,"confirmed_at":"2026-11-01T12:40:35","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-129","name":"海辺の里おおしば","address":"広島県東広島市安芸津町風早2514-1","raw_name":"海辺の里おおしば","raw_address":"広島県東広島市安芸津町風早2514-1","area":"安芸津","category":"生活・経済関連施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.27066719995531,"lon":132.7996599335239,"confirmed_at":"2026-11-01T12:41:26","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-130","name":"テクノタウン東広島集会所","address":"広島県東広島市西大沢1丁目31-3","raw_name":"テクノタウン東広島集会所","raw_address":"広島県東広島市西大沢1丁目31-3","area":"その他","category":"生活・経済関連施設","wheel_spaces":1,"plus_one_spaces":null,"lat":34.37261361520981,"lon":132.72537320485125,"confirmed_at":"2026-11-01T12:42:42","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-131","name":"広島中央エコパーク","address":"東広島市西条町上三永10759番地2","raw_name":"中央エコパーク管理棟","raw_address":"広島県東広島市西条町上三永10759-2","area":"西条","category":"生活・経済関連施設","wheel_spaces":2,"plus_one_spaces":1,"lat":34.4088699965532,"lon":132.78718690255567,"confirmed_at":"2026-11-01T12:43:37","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-138","name":"ひがしひろしま聖苑","address":"東広島市八本松町宗吉10056番地","raw_name":"ひがしひろしま聖苑","raw_address":"広島県東広島市八本松町宗吉56","area":"八本松","category":"斎場・霊園等","wheel_spaces":3,"plus_one_spaces":null,"lat":34.463287218993315,"lon":132.69014395371497,"confirmed_at":"2026-11-01T12:44:44","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-139","name":"ひがしひろしま墓園","address":"広島県東広島市八本松町宗吉56","raw_name":"ひがしひろしま墓園","raw_address":"広島県東広島市八本松町宗吉56","area":"八本松","category":"斎場・霊園等","wheel_spaces":3,"plus_one_spaces":1,"lat":34.46329245457173,"lon":132.69014923272238,"confirmed_at":"2026-11-01T12:45:08","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-146","name":"福富物産しゃくなげ館","address":"広島県東広島市福富町下竹仁470-1","raw_name":"福富物産しゃくなげ館","raw_address":"広島県東広島市福富町下竹仁470-1","area":"福富","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":2,"plus_one_spaces":1,"lat":34.52573819518006,"lon":132.7428083252802,"confirmed_at":"2026-11-01T12:45:57","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-147","name":"ゆめタウン　黒瀬","address":"広島県東広島市黒瀬町楢原100-1","raw_name":"ゆめタウン　黒瀬","raw_address":"広島県東広島市黒瀬町楢原100-1","area":"黒瀬","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":6,"plus_one_spaces":2,"lat":34.32409572073156,"lon":132.66590172674523,"confirmed_at":"2026-11-01T12:46:26","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-148","name":"ゆめタウン　東広島","address":"広島県東広島市西条土与丸1-5-7","raw_name":"ゆめタウン　東広島","raw_address":"広島県東広島市西条土与丸1-5-7","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":5,"plus_one_spaces":null,"lat":34.42695244430235,"lon":132.75062429331265,"confirmed_at":"2026-11-01T12:48:06","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-149","name":"フジグラン　東広島","address":"広島県東広島市西条町御薗宇4405","raw_name":"フジグラン　東広島","raw_address":"広島県東広島市西条町御薗宇4405","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":19,"plus_one_spaces":null,"lat":34.40777209167004,"lon":132.74954311296526,"confirmed_at":"2026-11-01T12:48:28","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-150","name":"ユーホー　東広島店","address":"広島県東広島市西条町御薗宇4272","raw_name":"ユーホー　東広島店","raw_address":"広島県東広島市西条町御薗宇4272","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":3,"plus_one_spaces":null,"lat":34.40523814770386,"lon":132.75086084620136,"confirmed_at":"2026-11-01T12:48:52","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-151","name":"あおぞらぱん屋さん 白市店","address":"広島県東広島市高屋町小谷2921-1","raw_name":"あおぞらぱん屋さん","raw_address":"広島県東広島市高屋町小谷2921-1","area":"高屋","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":2,"plus_one_spaces":null,"lat":34.443681120724335,"lon":132.82986417381179,"confirmed_at":"2026-11-01T12:49:52","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-152","name":"ココカラファイン　白市駅前","address":"広島県東広島市高屋町小谷3279-1","raw_name":"ドラッグセガミ　白市駅前","raw_address":"広島県東広島市高屋町小谷3279-1","area":"高屋","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":1,"plus_one_spaces":1,"lat":34.445836229725934,"lon":132.8290084366129,"confirmed_at":"2026-11-01T10:36:17","review_origin":"seed_13"},{"id":"hiroshima-2026-153","name":"ゆめタウン　学園店","address":"広島県東広島市西条下見6-2-32","raw_name":"ゆめタウン　学園店","raw_address":"広島県東広島市西条下見6-2-32","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":7,"plus_one_spaces":null,"lat":34.40856782037032,"lon":132.714156178191,"confirmed_at":"2026-11-01T12:50:24","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-154","name":"ゆめマート　八本松","address":"広島県東広島市八本松東3-10-2","raw_name":"ゆめマート　八本松","raw_address":"広島県東広島市八本松東3-10-2","area":"八本松","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":2,"plus_one_spaces":1,"lat":34.446265609673254,"lon":132.70871042573322,"confirmed_at":"2026-11-01T12:50:54","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-155","name":"ショージ　八本松南店","address":"広島県東広島市八本松南2-18-14","raw_name":"ショージ　八本松南店","raw_address":"広島県東広島市八本松南2-18-14","area":"八本松","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":2,"plus_one_spaces":1,"lat":34.43936764708389,"lon":132.6965588610135,"confirmed_at":"2026-11-01T12:51:21","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-156","name":"ショージ　下見店","address":"広島県東広島市西条町下見4625-1","raw_name":"ショージ　下見店","raw_address":"広島県東広島市西条町下見4625-1","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":2,"plus_one_spaces":1,"lat":34.407465316999726,"lon":132.70709761370082,"confirmed_at":"2026-11-01T12:51:41","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-157","name":"ベッセルホテル　東広島","address":"広島県東広島市三永2-6-36","raw_name":"ベッセルホテル　東広島","raw_address":"広島県東広島市三永2-6-36","area":"その他","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":1,"plus_one_spaces":1,"lat":34.38802782841041,"lon":132.76134644673303,"confirmed_at":"2026-11-01T12:52:05","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-158","name":"ローソン　東広島高屋町桧山店","address":"広島県東広島市高屋町檜山258-1","raw_name":"ローソン　東広島高屋町桧山店","raw_address":"広島県東広島市高屋町檜山258-1","area":"高屋","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":1,"plus_one_spaces":null,"lat":34.440200266656554,"lon":132.7651369076517,"confirmed_at":"2026-11-01T12:52:26","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-159","name":"ローソン東広島西条御薗宇店","address":"広島県東広島市西条町御薗宇字上神田6200-2","raw_name":"ローソン　東広島西条御薗宇店","raw_address":"広島県東広島市西条町御薗宇字上神田6200-2","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":1,"plus_one_spaces":null,"lat":34.41463173827281,"lon":132.7523498002776,"confirmed_at":"2026-10-13T21:29:01","review_origin":"seed_13"},{"id":"hiroshima-2026-160","name":"ミスターマックス　八本松店","address":"広島県東広島市八本松西1-12-23","raw_name":"ミスターマックス　八本松店","raw_address":"広島県東広島市八本松西1-12-23","area":"八本松","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":2,"plus_one_spaces":null,"lat":34.44506705378046,"lon":132.68167940142183,"confirmed_at":"2026-11-01T12:52:48","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-161","name":"藤三 黒瀬店","address":"広島県東広島市黒瀬町丸山1240番1号","raw_name":"ビッグハウス　黒瀬店","raw_address":"広島県東広島市黒瀬町丸山1240","area":"黒瀬","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":4,"plus_one_spaces":null,"lat":34.32438825587193,"lon":132.67531254934295,"confirmed_at":"2026-11-01T12:54:29","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-162","name":"マックスバリュ　西条西店","address":"広島県東広島市西条町寺家3791-1","raw_name":"マックスバリュ　西条西店","raw_address":"広島県東広島市西条町寺家3791-1","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":2,"plus_one_spaces":null,"lat":34.439160242247844,"lon":132.72044042419085,"confirmed_at":"2026-11-01T12:54:58","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-163","name":"マックスバリュ　高屋店","address":"広島県東広島市高屋町杵原1776","raw_name":"マックスバリュ　高屋店","raw_address":"広島県東広島市高屋町杵原1776","area":"高屋","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":2,"plus_one_spaces":null,"lat":34.45347378996906,"lon":132.78708680825434,"confirmed_at":"2026-11-01T12:55:25","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-164","name":"フレスタ　西条店","address":"広島県東広島市西条中央4-1-1","raw_name":"フレスタ　西条店","raw_address":"広島県東広島市西条中央4-1-1","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":3,"plus_one_spaces":null,"lat":34.41459848431763,"lon":132.7434072254259,"confirmed_at":"2026-11-01T12:55:48","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-165","name":"中国労働金庫　西条支店","address":"広島県東広島市西条大坪町1-36","raw_name":"中国労働金庫　西条支店","raw_address":"広島県東広島市西条大坪町1-36","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":1,"plus_one_spaces":null,"lat":34.42450660278715,"lon":132.74715695980532,"confirmed_at":"2026-11-01T12:56:28","review_origin":"manual_review_20261101"},{"id":"hiroshima-2026-166","name":"ケーズデンキ東広島店","address":"広島県東広島市西条町助実1232","raw_name":"ケーズデンキ東広島店","raw_address":"広島県東広島市西条町助実","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":5,"plus_one_spaces":3,"lat":34.422406821745305,"lon":132.7569728817319,"confirmed_at":"2026-10-13T23:30:35","review_origin":"seed_13"},{"id":"hiroshima-2026-167","name":"東広島グリーンホテルモーリス","address":"広島県東広島市西条昭和町11-8","raw_name":"東広島グリーンホテルモーリス","raw_address":"広島県東広島市西条昭和町11-8","area":"西条","category":"ショッピングセンター・その他小売店・銀行・ホテル","wheel_spaces":3,"plus_one_spaces":2,"lat":34.42339144932767,"lon":132.74228020820377,"confirmed_at":"2026-11-01T12:57:39","review_origin":"manual_review_20261101"}],"source_description":"広島県「思いやり駐車場利用証交付制度」の協力施設一覧を基礎台帳として使用。施設名・住所・地域・施設種別・車いす等区画数・プラスワン区画数を保持。","terminology":{"source_original":"原典＝107施設を選ぶ基礎になった一覧情報","canonical_master":"原本＝手作業で位置確認を終え、このロールアウト版で固定した107登録地点"}}</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
+<script>
+if(typeof window.L==='undefined')document.write('<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"><\/script>');
+</script>
+<script>
+(()=>{'use strict';
+
+const $=id=>document.getElementById(id);
+const canonical=JSON.parse($('canonical-data').textContent);
+const POINTS=canonical.points;
+const byId=Object.fromEntries(POINTS.map(p=>[p.id,p]));
+const STORE_KEY='higashihiroshima-parking-rollout-v1-contributions';
+const CONTRIB_SCHEMA='higashihiroshima-accessible-parking-rollout/contributions-1.0';
+
+let state={points:[],comments:[]};
+let filtered=POINTS.slice();
+let selectedId=null;
+let addMode=false;
+let pendingLatLng=null;
+let pendingLinkId=null;
+let map=null,tileLayer=null;
+const canonicalLayer=L.layerGroup(), communityLayer=L.layerGroup();
+const canonicalMarkers={},communityMarkers={};
+
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function fmt(v,s=''){return Number.isFinite(Number(v))?Number(v).toLocaleString('ja-JP')+s:'—'}
+function coord(p){return `${Number(p.lat).toFixed(7)}, ${Number(p.lon).toFixed(7)}`}
+function validCoord(p){return p&&Number.isFinite(Number(p.lat))&&Number.isFinite(Number(p.lon))&&Number(p.lat)>=33.9&&Number(p.lat)<=35.0&&Number(p.lon)>=132.0&&Number(p.lon)<=133.3}
+function parseCoord(s){
+  const m=String(s||'').trim().replace(/[，、]/g,',').match(/(-?\d{1,2}(?:\.\d+)?)\s*(?:,|\s)\s*(-?\d{2,3}(?:\.\d+)?)/);
+  if(!m)return null;
+  const p={lat:Number(m[1]),lon:Number(m[2])};
+  return validCoord(p)?p:null;
+}
+function now(){return new Date().toISOString()}
+function uid(prefix){return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2,8)}`}
+function directions(p){return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(p.lat+','+p.lon)}`}
+function mapSearch(p){return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.lat+','+p.lon)}`}
+function facilitySearch(p){return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name+' '+p.address)}`}
+function street(p){return `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${encodeURIComponent(p.lat+','+p.lon)}`}
+function typeLabel(t){return t==='wheelchair_parking'?'車椅子用駐車位置':t==='observation'?'気になる地点':'その他'}
+
+function safeState(raw){
+  const out={points:[],comments:[]};
+  if(!raw||typeof raw!=='object')return out;
+  if(Array.isArray(raw.points)){
+    for(const p of raw.points){
+      if(!p||typeof p.id!=='string'||p.id.length>120||typeof p.name!=='string'||p.name.length>120||!validCoord(p))continue;
+      out.points.push({
+        id:p.id,name:p.name.slice(0,120),lat:Number(p.lat),lon:Number(p.lon),
+        type:['wheelchair_parking','observation','other'].includes(p.type)?p.type:'other',
+        status:'team_added_unverified',
+        linked_facility_id:(typeof p.linked_facility_id==='string'&&byId[p.linked_facility_id])?p.linked_facility_id:null,
+        created_at:typeof p.created_at==='string'?p.created_at:now(),
+        updated_at:typeof p.updated_at==='string'?p.updated_at:(typeof p.created_at==='string'?p.created_at:now())
+      });
+    }
+  }
+  if(Array.isArray(raw.comments)){
+    for(const c of raw.comments){
+      if(!c||typeof c.id!=='string'||c.id.length>120||!['canonical','community'].includes(c.target_type)||typeof c.target_id!=='string'||typeof c.text!=='string')continue;
+      const text=c.text.trim().slice(0,1000); if(!text)continue;
+      out.comments.push({id:c.id,target_type:c.target_type,target_id:c.target_id,text,created_at:typeof c.created_at==='string'?c.created_at:now()});
+    }
+  }
+  return out;
+}
+function loadState(){
+  try{state=safeState(JSON.parse(localStorage.getItem(STORE_KEY)||'{}'))}
+  catch(e){state={points:[],comments:[]}}
+}
+function saveState(){
+  try{
+    localStorage.setItem(STORE_KEY,JSON.stringify(state));
+    $('shareStatus').textContent='追加地点・コメントをこの端末に保存しました。まずはそのままMAPを使ってみてください。';
+  }catch(e){
+    $('shareStatus').textContent='ブラウザ内保存ができませんでした。必要な場合は共有JSONを書き出して保管してください。';
+  }
+}
+function commentsFor(type,id){return state.comments.filter(c=>c.target_type===type&&c.target_id===id).sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at)))}
+function renderComments(type,id){
+  const arr=commentsFor(type,id);
+  if(!arr.length)return '<div class="comments"><div class="comment">コメントはまだありません。</div></div>';
+  return '<div class="comments">'+arr.slice(0,4).map(c=>`<div class="comment">${esc(c.text)}<time>${esc(new Date(c.created_at).toLocaleString('ja-JP'))}</time></div>`).join('')+(arr.length>4?`<div class="comment">ほか ${arr.length-4}件</div>`:'')+'</div>';
+}
+function linkedAdds(id){return state.points.filter(p=>p.linked_facility_id===id)}
+
+function canonicalPopup(p){
+  const linked=linkedAdds(p.id);
+  const plusTxt=Number.isFinite(Number(p.plus_one_spaces))?`${Number(p.plus_one_spaces)}区画`:'記載なし';
+  const wheelTxt=Number.isFinite(Number(p.wheel_spaces))?`${Number(p.wheel_spaces)}区画`:'記載なし';
+  return `<div class="popup-kicker">登録地点</div>
+    <div class="popup-title">${esc(p.name)}</div>
+    <div class="popup-sub">${esc(p.address)}</div>
+    <dl class="popup-grid">
+      <dt>地域</dt><dd>${esc(p.area||'—')}</dd>
+      <dt>施設種別</dt><dd>${esc(p.category||'—')}</dd>
+      <dt>車いす等</dt><dd>${wheelTxt}</dd>
+      <dt>プラスワン</dt><dd>${plusTxt}</dd>
+      <dt>登録座標</dt><dd>${coord(p)}</dd>
+      ${linked.length?`<dt>追加地点</dt><dd>${linked.length}件</dd>`:''}
+    </dl>
+    <div class="popup-note">Googleマップで車椅子用駐車区画を判別できた場合はその位置を優先し、判別できない場合は施設位置を代替登録しています。現地確認済みを意味しません。</div>
+    <div class="popup-actions">
+      <a class="mapbtn" target="_blank" rel="noopener" href="${mapSearch(p)}">Googleマップ</a>
+      <a class="svbtn" target="_blank" rel="noopener" href="${street(p)}">ストリートビュー</a>
+      <a class="dirbtn" target="_blank" rel="noopener" href="${directions(p)}">この地点へ行く</a>
+      <button type="button" onclick="rolloutAddComment('canonical','${p.id}')">コメントを追加</button>
+      <button class="orange" type="button" onclick="rolloutStartAdd('${p.id}')">この施設に地点を追加</button>
+    </div>${renderComments('canonical',p.id)}`;
+}
+function communityPopup(p){
+  const linked=p.linked_facility_id&&byId[p.linked_facility_id]?byId[p.linked_facility_id]:null;
+  return `<div class="popup-kicker">チーム追加地点・未検証</div>
+    <div class="popup-title">${esc(p.name)}</div>
+    <div class="popup-sub">${esc(typeLabel(p.type))}${linked?`<br>関連施設：${esc(linked.name)}`:''}</div>
+    <dl class="popup-grid">
+      <dt>登録座標</dt><dd>${coord(p)}</dd>
+      <dt>状態</dt><dd>チーム追加・未検証</dd>
+    </dl>
+    <div class="popup-note">この地点はチームメンバーが後から追加した情報です。原本107地点とは別管理で、自動的に確定情報にはなりません。</div>
+    <div class="popup-actions">
+      <a class="mapbtn" target="_blank" rel="noopener" href="${mapSearch(p)}">Googleマップ</a>
+      <a class="svbtn" target="_blank" rel="noopener" href="${street(p)}">ストリートビュー</a>
+      <a class="dirbtn" target="_blank" rel="noopener" href="${directions(p)}">この地点へ行く</a>
+      <button type="button" onclick="rolloutAddComment('community','${p.id}')">コメントを追加</button>
+      <button type="button" onclick="rolloutDeletePoint('${p.id}')">この追加地点を削除</button>
+    </div>${renderComments('community',p.id)}`;
+}
+
+function initFilters(){
+  for(const [id,values] of [
+    ['area',[...new Set(POINTS.map(p=>p.area))].sort((a,b)=>a.localeCompare(b,'ja'))],
+    ['category',[...new Set(POINTS.map(p=>p.category))].sort((a,b)=>a.localeCompare(b,'ja'))]
+  ]){
+    const s=$(id);
+    for(const v of values){const o=document.createElement('option');o.value=v;o.textContent=v;s.append(o)}
+  }
+}
+function applyFilters(){
+  const q=$('search').value.trim().toLowerCase(),area=$('area').value,cat=$('category').value,wheel=Number($('wheel').value||0),plus=$('plus').value;
+  filtered=POINTS.filter(p=>{
+    if(q&&!`${p.name} ${p.address} ${p.raw_name||''}`.toLowerCase().includes(q))return false;
+    if(area&&p.area!==area)return false;
+    if(cat&&p.category!==cat)return false;
+    if(wheel&&Number(p.wheel_spaces||0)<wheel)return false;
+    if(plus==='yes'&&!Number(p.plus_one_spaces||0))return false;
+    if(plus==='no'&&Number(p.plus_one_spaces||0))return false;
+    return true;
+  });
+  $('count').textContent=`${filtered.length} / 107施設を表示`;
+  renderCanonical();
+  renderList();
+}
+const expandedFacilities=new Set();
+function renderList(){
+  const list=$('list');list.replaceChildren();
+  if(!filtered.length){
+    const q=document.createElement('p');q.className='statusline';q.textContent='条件に合う施設はありません。';list.append(q);return;
+  }
+  for(const p of filtered){
+    const d=document.createElement('details');
+    d.className='facility-card'+(selectedId===p.id?' active':'');
+    if(expandedFacilities.has(p.id))d.open=true;
+
+    const summary=document.createElement('summary');
+    const wrap=document.createElement('div');wrap.className='facility-summary-name';
+    const name=document.createElement('b');name.textContent=p.name;
+    const addr=document.createElement('small');addr.textContent=p.address;
+    wrap.append(name,addr);summary.append(wrap);
+
+    const detail=document.createElement('div');detail.className='facility-detail';
+    const dl=document.createElement('dl');dl.className='facility-grid';
+    const rows=[
+      ['住所',p.address],
+      ['地域',p.area||'—'],
+      ['施設種別',p.category||'—'],
+      ['車いす等',p.wheel_spaces==null?'記載なし':`${p.wheel_spaces}区画`],
+      ['プラスワン',p.plus_one_spaces==null?'記載なし':`${p.plus_one_spaces}区画`]
+    ];
+    for(const [k,v] of rows){
+      const dt=document.createElement('dt'),dd=document.createElement('dd');
+      dt.textContent=k;dd.textContent=v;dl.append(dt,dd);
+    }
+    detail.append(dl);
+
+    const source=document.createElement('div');source.className='facility-source';
+    const rawName=p.raw_name||p.name,rawAddress=p.raw_address||p.address;
+    source.innerHTML=`<b>原典記載</b><br>名称：${esc(rawName)}<br>住所：${esc(rawAddress)}`;
+    detail.append(source);
+
+    const pills=document.createElement('div');pills.className='pills';
+    const a=document.createElement('span');a.className='pill';a.textContent=`車いす等 ${p.wheel_spaces??'—'}`;
+    const c=document.createElement('span');c.className='pill';c.textContent=`プラスワン ${p.plus_one_spaces??'—'}`;
+    pills.append(a,c);
+    const cc=commentsFor('canonical',p.id).length;
+    if(cc){const x=document.createElement('span');x.className='pill comment';x.textContent=`コメント ${cc}`;pills.append(x)}
+    detail.append(pills);
+
+    const actions=document.createElement('div');actions.className='facility-actions';
+    const mapBtn=document.createElement('button');mapBtn.type='button';mapBtn.className='primary';mapBtn.textContent='地図で見る';
+    mapBtn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();openCanonical(p.id,true)});
+    const commentBtn=document.createElement('button');commentBtn.type='button';commentBtn.textContent='コメントを追加';
+    commentBtn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();addComment('canonical',p.id)});
+    actions.append(mapBtn,commentBtn);detail.append(actions);
+
+    d.append(summary,detail);
+    d.addEventListener('toggle',()=>{
+      if(d.open)expandedFacilities.add(p.id); else expandedFacilities.delete(p.id);
+    });
+    list.append(d);
+  }
+}
+function pointIcon(kind){
+  const cls=kind==='community'?'community':'canonical';
+  return L.divIcon({
+    className:'rollout-point-icon',
+    html:`<span class="point-hit" aria-hidden="true"><span class="point-dot ${cls}"></span></span>`,
+    iconSize:[32,32],iconAnchor:[16,16],popupAnchor:[0,-12]
+  });
+}
+function openCanonical(id,pan){
+  const p=byId[id]; if(!p)return;
+  selectedId=id;renderList();
+  const m=canonicalMarkers[id];
+  if(m){if(pan)map.setView([p.lat,p.lon],Math.max(map.getZoom(),17));m.setPopupContent(canonicalPopup(p));m.openPopup()}
+}
+function renderCanonical(){
+  canonicalLayer.clearLayers();Object.keys(canonicalMarkers).forEach(k=>delete canonicalMarkers[k]);
+  if(!$('canonicalOn').checked)return;
+  for(const p of filtered){
+    const m=L.marker([p.lat,p.lon],{icon:pointIcon('canonical'),title:p.name,keyboard:true,bubblingMouseEvents:false});
+    m.bindPopup(canonicalPopup(p),{maxWidth:380,minWidth:260,autoPan:true,autoPanPadding:[24,24],closeButton:true});
+    m.bindTooltip(p.name,{direction:'top',className:'point-tooltip',offset:[0,-8],opacity:.98});
+    m.on('mousedown touchstart',e=>{if(e&&e.originalEvent&&e.originalEvent.stopPropagation)e.originalEvent.stopPropagation()});
+    m.on('click',e=>{
+      if(e&&e.originalEvent&&e.originalEvent.stopPropagation)e.originalEvent.stopPropagation();
+      openCanonical(p.id,false);
+    });
+    m.addTo(canonicalLayer);canonicalMarkers[p.id]=m;
+  }
+}
+function renderCommunity(){
+  communityLayer.clearLayers();Object.keys(communityMarkers).forEach(k=>delete communityMarkers[k]);
+  if(!$('communityOn').checked)return;
+  for(const p of state.points){
+    const m=L.marker([p.lat,p.lon],{icon:pointIcon('community'),title:p.name,keyboard:true,bubblingMouseEvents:false});
+    m.bindPopup(communityPopup(p),{maxWidth:380,minWidth:260,autoPan:true,autoPanPadding:[24,24],closeButton:true});
+    m.bindTooltip(p.name,{direction:'top',className:'point-tooltip',offset:[0,-8],opacity:.98});
+    m.on('mousedown touchstart',e=>{if(e&&e.originalEvent&&e.originalEvent.stopPropagation)e.originalEvent.stopPropagation()});
+    m.on('click',e=>{
+      if(e&&e.originalEvent&&e.originalEvent.stopPropagation)e.originalEvent.stopPropagation();
+      m.setPopupContent(communityPopup(p));
+      m.openPopup();
+    });
+    m.addTo(communityLayer);communityMarkers[p.id]=m;
+  }
+}
+function updateLayers(){
+  for(const [layer,id] of [[canonicalLayer,'canonicalOn'],[communityLayer,'communityOn']]){
+    const on=$(id).checked;
+    if(on&&!map.hasLayer(layer))layer.addTo(map);
+    if(!on&&map.hasLayer(layer))map.removeLayer(layer);
+  }
+  if($('canonicalOn').checked)renderCanonical();
+  if($('communityOn').checked)renderCommunity();
+}
+function updateStats(){
+  $('addedCount').textContent=state.points.length;
+  $('commentCount').textContent=state.comments.length;
+}
+function fitVisible(){
+  const ll=[];
+  if($('canonicalOn').checked)for(const p of filtered)ll.push([p.lat,p.lon]);
+  if($('communityOn').checked)for(const p of state.points)ll.push([p.lat,p.lon]);
+  if(ll.length)map.fitBounds(ll,{padding:[28,28],maxZoom:15});
+}
+
+function startAdd(linkId=null){
+  addMode=true;pendingLinkId=linkId&&byId[linkId]?linkId:null;
+  $('addBanner').hidden=false;
+  $('addPointBtn').textContent='追加モードを解除';
+  $('shareStatus').textContent=pendingLinkId?`「${byId[pendingLinkId].name}」に紐づける地点を地図上でクリックしてください。`:'追加したい場所を地図上でクリックしてください。';
+}
+function stopAdd(){
+  addMode=false;pendingLatLng=null;pendingLinkId=null;
+  $('addBanner').hidden=true;$('addPointBtn').textContent='＋ 地点を追加';
+}
+function openAddModal(latlng){
+  pendingLatLng={lat:Number(latlng.lat),lon:Number(latlng.lng)};
+  const link=pendingLinkId&&byId[pendingLinkId]?byId[pendingLinkId]:null;
+  $('linkInfo').textContent=link?`関連施設：「${link.name}」に紐づけて保存します。原本地点は変更しません。`:'原本とは別の「チーム追加地点」として保存します。';
+  $('addName').value=link?`${link.name} / 追加地点`:'';
+  $('addType').value='wheelchair_parking';
+  $('addCoords').value=`${pendingLatLng.lat.toFixed(7)}, ${pendingLatLng.lon.toFixed(7)}`;
+  $('addComment').value='';
+  $('addModal').hidden=false;
+}
+function closeAddModal(){$('addModal').hidden=true;pendingLatLng=null}
+function saveAddedPoint(){
+  const p=parseCoord($('addCoords').value),name=$('addName').value.trim().slice(0,120),comment=$('addComment').value.trim().slice(0,1000);
+  if(!p)return alert('緯度・経度を確認してください。');
+  if(!name)return alert('地点の名称を入力してください。');
+  const id=uid('local'),t=now();
+  state.points.push({id,name,lat:p.lat,lon:p.lon,type:$('addType').value,status:'team_added_unverified',linked_facility_id:pendingLinkId||null,created_at:t,updated_at:t});
+  if(comment)state.comments.push({id:uid('comment'),target_type:'community',target_id:id,text:comment,created_at:t});
+  saveState();closeAddModal();stopAdd();renderCommunity();updateStats();
+  $('communityOn').checked=true;updateLayers();
+  const m=communityMarkers[id];if(m){map.setView([p.lat,p.lon],Math.max(map.getZoom(),17));m.openPopup()}
+}
+function addComment(targetType,targetId){
+  if(targetType==='canonical'&&!byId[targetId])return;
+  if(targetType==='community'&&!state.points.some(p=>p.id===targetId))return;
+  const text=prompt('場所についてのコメントを入力してください。\\n個人情報ではなく、設備・位置・利用状況などの観察を記録してください。');
+  if(text===null)return;
+  const clean=text.trim().slice(0,1000);if(!clean)return;
+  state.comments.push({id:uid('comment'),target_type:targetType,target_id:targetId,text:clean,created_at:now()});
+  saveState();updateStats();renderList();
+  if(targetType==='canonical'&&canonicalMarkers[targetId])canonicalMarkers[targetId].setPopupContent(canonicalPopup(byId[targetId]));
+  if(targetType==='community'){
+    const p=state.points.find(x=>x.id===targetId);
+    if(p&&communityMarkers[targetId])communityMarkers[targetId].setPopupContent(communityPopup(p));
+  }
+}
+function deletePoint(id){
+  const p=state.points.find(x=>x.id===id);if(!p)return;
+  if(!confirm(`追加地点「${p.name}」をこの端末から削除しますか？\\n原本107地点には影響しません。`))return;
+  state.points=state.points.filter(x=>x.id!==id);
+  state.comments=state.comments.filter(c=>!(c.target_type==='community'&&c.target_id===id));
+  saveState();renderCommunity();updateStats();renderList();
+}
+
+function exportJson(){
+  const payload={schema:CONTRIB_SCHEMA,app_version:'1.0.0',canonical_id:canonical.canonical_id,exported_at:now(),points:state.points,comments:state.comments};
+  const blob=new Blob([JSON.stringify(payload,null,2)+'\\n'],{type:'application/json;charset=utf-8'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  const stamp=new Date().toISOString().slice(0,10).replaceAll('-','');
+  a.href=url;a.download=`東広島_駐車環境MAP_共有データ_${stamp}.json`;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),4000);
+  $('shareStatus').textContent=`共有JSONを書き出しました（追加地点 ${state.points.length}件／コメント ${state.comments.length}件）。この機能は将来のチーム統合用です。`;
+}
+function importPayload(payload){
+  if(!payload||payload.schema!==CONTRIB_SCHEMA)throw new Error('このMAP用の共有JSONではありません。');
+  if(payload.canonical_id&&payload.canonical_id!==canonical.canonical_id)throw new Error('原本バージョンが異なるJSONです。');
+  const incoming=safeState(payload),pids=new Set(state.points.map(p=>p.id)),cids=new Set(state.comments.map(c=>c.id));
+  let pa=0,ca=0,skip=0;
+  for(const p of incoming.points){if(pids.has(p.id)){skip++;continue}state.points.push(p);pids.add(p.id);pa++}
+  for(const c of incoming.comments){if(cids.has(c.id)){skip++;continue}state.comments.push(c);cids.add(c.id);ca++}
+  saveState();renderCommunity();updateStats();renderList();
+  $('shareStatus').textContent=`JSONを統合しました：追加地点 +${pa}件、コメント +${ca}件、重複等 ${skip}件をスキップ。`;
+}
+function clearContrib(){
+  if(!confirm('この端末に保存した追加地点・コメントをすべて初期化しますか？\\n原本107地点には影響しません。必要なら先に共有JSONを書き出してください。'))return;
+  state={points:[],comments:[]};saveState();renderCommunity();updateStats();renderList();
+  $('shareStatus').textContent='この端末の追加データを初期化しました。原本107地点は変更していません。';
+}
+
+window.rolloutAddComment=addComment;
+window.rolloutDeletePoint=deletePoint;
+window.rolloutStartAdd=id=>{selectedId=id;renderList();startAdd(id);map.closePopup()};
+
+loadState();
+initFilters();
+
+map=L.map('map',{zoomControl:true,zoomAnimation:true,markerZoomAnimation:true,fadeAnimation:true});
+if($('map').clientHeight<100){
+  $('shareStatus').textContent='地図領域の高さを確保できませんでした。ページを再読み込みしてください。';
+}
+tileLayer=L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png',{attribution:'<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">国土地理院</a>',maxZoom:19,maxNativeZoom:18,opacity:.82}).addTo(map);
+canonicalLayer.addTo(map);communityLayer.addTo(map);
+
+applyFilters();renderCommunity();updateStats();fitVisible();
+
+for(const id of ['search','area','category','wheel','plus'])$(id).addEventListener(id==='search'?'input':'change',applyFilters);
+for(const id of ['canonicalOn','communityOn'])$(id).addEventListener('change',updateLayers);
+$('mapOpacity').addEventListener('input',()=>{tileLayer.setOpacity(Number($('mapOpacity').value)/100);$('mapValue').textContent=$('mapOpacity').value+'%'});
+$('fitBtn').addEventListener('click',fitVisible);
+
+$('addPointBtn').addEventListener('click',()=>{if(addMode)stopAdd();else startAdd(null)});
+map.on('click',e=>{if(addMode)openAddModal(e.latlng)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('addModal').hidden)closeAddModal();else if(addMode)stopAdd()}});
+$('saveAdd').addEventListener('click',saveAddedPoint);
+$('cancelAdd').addEventListener('click',()=>{closeAddModal();stopAdd()});
+$('addClose').addEventListener('click',()=>{closeAddModal();stopAdd()});
+
+$('exportBtn').addEventListener('click',exportJson);
+$('importBtn').addEventListener('click',()=>$('importFile').click());
+$('importFile').addEventListener('change',async e=>{
+  const file=e.target.files&&e.target.files[0];if(!file)return;
+  try{const payload=JSON.parse(await file.text());importPayload(payload)}
+  catch(err){alert('JSONを読み込めませんでした：'+err.message)}
+  finally{e.target.value=''}
+});
+$('clearBtn').addEventListener('click',clearContrib);
+
+$('helpBtn').addEventListener('click',()=>$('helpModal').hidden=false);
+$('helpClose').addEventListener('click',()=>$('helpModal').hidden=true);
+$('helpModal').addEventListener('click',e=>{if(e.target===$('helpModal'))$('helpModal').hidden=true});
+$('addModal').addEventListener('click',e=>{if(e.target===$('addModal')){closeAddModal();stopAdd()}});
+
+})();
+</script>
+</body>
+</html>
